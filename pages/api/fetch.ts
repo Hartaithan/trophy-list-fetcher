@@ -4,6 +4,7 @@ import { load } from "cheerio";
 import chrome from "chrome-aws-lambda";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
+import "puppeteer-extra-plugin-user-data-dir";
 import "puppeteer-extra-plugin-user-preferences";
 import "puppeteer-extra-plugin-stealth/evasions/chrome.app";
 import "puppeteer-extra-plugin-stealth/evasions/chrome.csi";
