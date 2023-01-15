@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { load } from "cheerio";
+import { Cheerio, CheerioAPI, load, Element } from "cheerio";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL!;
@@ -45,6 +45,19 @@ const getContent = async (
   return content;
 };
 
+const getTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
+  let trophies: Object[] = [];
+  rows.each((_, row) => {
+    const content = cheerio(row).find(selectors.rowContent).first();
+    const name = content.find("a").text().trim();
+    const description = content.contents().last().text().trim();
+    if (name.length !== 0 && description.length !== 0) {
+      trophies.push({ name, description });
+    }
+  });
+  return trophies;
+};
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { url, example } = req.query;
 
@@ -70,15 +83,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const name = "Base Game";
     const table = listsEl.first().find(selectors.table);
     const rows = table.find(selectors.tableRows);
-    let trophies: Object[] = [];
-    rows.each((_, row) => {
-      const content = cheerio(row).find(selectors.rowContent).first();
-      const name = content.find("a").text().trim();
-      const description = content.contents().last().text().trim();
-      if (name.length !== 0 && description.length !== 0) {
-        trophies.push({ name, description });
-      }
-    });
+    const trophies = getTrophyList(cheerio, rows);
     const count = trophies.length;
     lists.push({ name, count, trophies });
 
@@ -91,15 +96,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const name = cheerio(nameRow).find(selectors.name).text().trim();
     const table = nameRow.next();
     const rows = table.find(selectors.tableRows);
-    let trophies: Object[] = [];
-    rows.each((_, row) => {
-      const content = cheerio(row).find(selectors.rowContent).first();
-      const name = content.find("a").text().trim();
-      const description = content.contents().last().text().trim();
-      if (name.length !== 0 && description.length !== 0) {
-        trophies.push({ name, description });
-      }
-    });
+    const trophies = getTrophyList(cheerio, rows);
     const count = trophies.length;
     lists.push({ name, count, trophies });
   });
