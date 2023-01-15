@@ -6,6 +6,10 @@ const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL;
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 const HOST = process.env.NEXT_PUBLIC_HOST;
 
+const selectors = {
+  list: "#content > div.row > div.col-xs > div.box.no-top-border",
+};
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { url, example } = req.query;
 
@@ -43,17 +47,59 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const cheerio = load(content.body);
+
   const title = cheerio("title").text();
-  const table = cheerio("table.zebra").first();
-  const rows = table.find("tbody > tr");
-  let trophies: Object[] = [];
-  rows.each((_, element) => {
-    const row = cheerio(element).find("td:nth-child(2)").first();
-    const name = row.find("a").text();
-    const description = row.contents().last().text().trim();
-    trophies.push({ name, description });
+
+  const listsEl = cheerio(
+    "#content > div.row > div.col-xs > div.box.no-top-border"
+  );
+  let lists: Object[] = [];
+
+  // NO DLC LISTS
+  if (listsEl.length === 1) {
+    const name = "Base Game";
+    const table = listsEl.first().find("table.zebra");
+    const rows = table.find("tbody > tr");
+    let trophies: Object[] = [];
+    rows.each((_, row) => {
+      const content = cheerio(row).find("td:nth-child(2)").first();
+      const name = content.find("a").text().trim();
+      const description = content.contents().last().text().trim();
+      if (name.length !== 0 && description.length !== 0) {
+        trophies.push({ name, description });
+      }
+    });
+    const count = trophies.length;
+    lists.push({ name, count, trophies });
+
+    return res.status(200).json({ title, lists });
+  }
+
+  // HAVE DLC LISTS
+  listsEl.each((_, list) => {
+    const nameRow = cheerio(list).find(
+      "table[style='border-bottom: 1px solid #dfdfdf;']"
+    );
+    const name = cheerio(nameRow)
+      .find("tbody > tr > td:nth-child(2) > span")
+      .text()
+      .trim();
+    const table = nameRow.next();
+    const rows = table.find("tbody > tr");
+    let trophies: Object[] = [];
+    rows.each((_, row) => {
+      const content = cheerio(row).find("td:nth-child(2)").first();
+      const name = content.find("a").text().trim();
+      const description = content.contents().last().text().trim();
+      if (name.length !== 0 && description.length !== 0) {
+        trophies.push({ name, description });
+      }
+    });
+    const count = trophies.length;
+    lists.push({ name, count, trophies });
   });
-  return res.status(200).json({ title, trophies });
+
+  return res.status(200).json({ title, lists });
 };
 
 export default handler;
