@@ -1,52 +1,46 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-// @ts-ignore
-import puppeteer from "puppeteer-core";
 import { load } from "cheerio";
-import chrome from "chrome-aws-lambda";
 
-type Data = {
-  title: string;
-};
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL;
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const HOST = process.env.NEXT_PUBLIC_HOST;
 
-const local = {
-  args: [],
-  executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  headless: true,
-};
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { url, example } = req.query;
 
-const getBrowser = async () => {
-  const options = {
-    production: {
-      args: chrome.args,
-      executablePath: await chrome.executablePath,
-      headless: chrome.headless,
-    },
-    development: local,
-    test: local,
-  };
-  const browser = await puppeteer.launch(options[process.env.NODE_ENV]);
-  return browser;
-};
+  let content = null;
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const { url } = req.query;
-
-  const browser = await getBrowser();
-
-  const page = await browser.newPage();
-  page.setUserAgent(
-    "Opera/9.80 (J2ME/MIDP; Opera Mini/5.1.21214/28.2725; U; ru) Presto/2.8.119 Version/11.10"
-  );
-
-  if (!url) {
-    return res.status(400).json({ title: "url not found" });
+  if (!API_URL || !SCRAPE_URL || !API_KEY || !HOST) {
+    return res.status(400).json({ message: "Unable to get env variables" });
   }
 
-  await page.goto(url as string);
+  if (typeof url !== "string") {
+    return res.status(400).json({ message: "Invalid url format" });
+  }
 
-  const content = await page.content();
-  const cheerio = load(content);
+  switch (!!example) {
+    case true:
+      const example = await fetch(API_URL + "/example").then((res) =>
+        res.json()
+      );
+      content = JSON.parse(example);
+      break;
+    default:
+      const payload = { url };
+      content = await fetch(SCRAPE_URL, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          "X-RapidAPI-Key": API_KEY,
+          "X-RapidAPI-Host": HOST,
+        },
+      }).then((res) => res.json());
+      break;
+  }
 
+  const cheerio = load(content.body);
   const title = cheerio("title").text();
 
   return res.status(200).json({ title });
