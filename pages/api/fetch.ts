@@ -42,8 +42,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const cheerio = load(content.body);
   const title = cheerio("title").text();
-
-  return res.status(200).json({ title });
+  const table = cheerio("table.zebra").first();
+  const rows = table.find("tbody > tr");
+  let trophies: Object[] = [];
+  rows.each((_, element) => {
+    const row = cheerio(element).find("td:nth-child(2)").first();
+    const name = row.find("a").text();
+    const description = row.contents().last().text().trim();
+    trophies.push({ name, description });
+  });
+  return res.status(200).json({ title, trophies });
 };
 
 export default handler;
