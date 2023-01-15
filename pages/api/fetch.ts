@@ -21,10 +21,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (!!example) {
     case true:
-      const example = await fetch(API_URL + "/example").then((res) =>
-        res.json()
-      );
-      content = JSON.parse(example);
+      let exampleUrl = "/example";
+      if (example === "dlc") {
+        exampleUrl = "/example?dlc=true";
+      }
+      const data = await fetch(API_URL + exampleUrl).then((res) => res.json());
+      content = JSON.parse(data);
       break;
     default:
       const payload = { url };
