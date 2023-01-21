@@ -89,6 +89,7 @@ const ResultPage: NextPage<
                 <td>{trophy.name}</td>
                 <td>{trophy.description}</td>
                 <td>{list.name}</td>
+                <td>{trophy.type}</td>
                 <td>{list.name === "Base Game" ? "YES" : "NO"}</td>
               </tr>
             );
