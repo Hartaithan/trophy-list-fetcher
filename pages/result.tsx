@@ -4,6 +4,7 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import { useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -39,8 +40,8 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
     };
   }
   try {
-    const result = await fetch(API_URL + `/fetch?url=${url}&example=true`).then(
-      (res) => res.json()
+    const result = await fetch(API_URL + `/fetch?url=${url}`).then((res) =>
+      res.json()
     );
     return {
       props: { result },
@@ -55,6 +56,12 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
 const ResultPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
+  const [complete, setComplete] = useState(false);
+
+  const onChange = () => {
+    setComplete((prev) => !prev);
+  };
+
   if (!props.result.lists) {
     return (
       <>
@@ -66,7 +73,10 @@ const ResultPage: NextPage<
 
   return (
     <>
-      <h3 className={styles.title}>{props.result.title}</h3>
+      <div className={styles.titleWrapper}>
+        <h3 className={styles.title}>{props.result.title}</h3>
+        <input type="checkbox" checked={complete} onChange={onChange} />
+      </div>
       <table className={styles.table}>
         {props.result.lists.map((list) =>
           list.trophies.map((trophy, index) => {
@@ -75,7 +85,7 @@ const ResultPage: NextPage<
             }
             return (
               <tr key={trophy.name + index}>
-                <td>NO</td>
+                <td>{complete ? "YES" : "NO"}</td>
                 <td>{trophy.name}</td>
                 <td>{trophy.description}</td>
                 <td>{list.name}</td>
