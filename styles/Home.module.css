@@ -3,3 +3,27 @@
   justify-content: center;
   align-items: center;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  min-height: 30px;
+  border-radius: 6px;
+  padding: 5px 10px;
+  background: #121212;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.input:last-of-type {
+  margin-bottom: 0;
+}
+
+.input[type="submit"] {
+  cursor: pointer;
+}
