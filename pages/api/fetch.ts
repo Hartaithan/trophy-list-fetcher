@@ -12,7 +12,8 @@ const selectors = {
   tableRows: "tbody > tr",
   name: "tbody > tr > td:nth-child(2) > span",
   nameRow: "table[style='border-bottom: 1px solid #dfdfdf;']",
-  rowContent: "td:nth-child(2)",
+  trophyContent: "td:nth-child(2)",
+  trophyType: "td:nth-child(6) > span > img",
 };
 
 const getContent = async (
@@ -48,11 +49,12 @@ const getContent = async (
 const getTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
   let trophies: Object[] = [];
   rows.each((_, row) => {
-    const content = cheerio(row).find(selectors.rowContent).first();
+    const content = cheerio(row).find(selectors.trophyContent).first();
+    const type = cheerio(row).find(selectors.trophyType).attr("title");
     const name = content.find("a").text().trim();
     const description = content.contents().last().text().trim();
     if (name.length !== 0 && description.length !== 0) {
-      trophies.push({ name, description });
+      trophies.push({ name, description, type });
     }
   });
   return trophies;
