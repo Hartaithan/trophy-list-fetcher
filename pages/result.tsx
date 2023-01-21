@@ -1,9 +1,9 @@
+import styles from "@/styles/Result.module.css";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { useRouter } from "next/router";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,13 +20,13 @@ interface IList {
 }
 
 interface IResult {
-  name: string;
+  title: string;
   lists: IList[];
   message: string | null;
 }
 
 interface IResultPageProps {
-  result: IResult | null;
+  result: IResult;
 }
 
 export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
   const url = ctx.query.url;
   if (!url) {
     return {
-      props: { result: null, message: "URL not found!" },
+      props: { result: { message: "URL not found!" } },
     };
   }
   try {
@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
       (res) => res.json()
     );
     return {
-      props: { result: result },
+      props: { result },
     };
   } catch (error) {
     return {
@@ -55,10 +55,7 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
 const ResultPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
-  const router = useRouter();
-  const url = router.query.url;
-
-  if (props.result && !props.result.lists) {
+  if (!props.result.lists) {
     return (
       <>
         <p>On no! Something has gone wrong!</p>
@@ -69,9 +66,25 @@ const ResultPage: NextPage<
 
   return (
     <>
-      <p>/result</p>
-      <p>{url}</p>
-      <p>{JSON.stringify(props, null, 2)}</p>
+      <h3 className={styles.title}>{props.result.title}</h3>
+      <table className={styles.table}>
+        {props.result.lists.map((list) =>
+          list.trophies.map((trophy, index) => {
+            if (trophy.type === "Platinum") {
+              return null;
+            }
+            return (
+              <tr key={trophy.name + index}>
+                <td>NO</td>
+                <td>{trophy.name}</td>
+                <td>{trophy.description}</td>
+                <td>{list.name}</td>
+                <td>{list.name === "Base Game" ? "YES" : "NO"}</td>
+              </tr>
+            );
+          })
+        )}
+      </table>
     </>
   );
 };

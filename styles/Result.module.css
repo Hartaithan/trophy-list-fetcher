@@ -1,0 +1,14 @@
+.title {
+  margin-bottom: 20px;
+}
+
+.table {
+  background: #121212;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 10px;
+}
+
+.table > tr > td {
+  padding: 5px 10px;
+}
