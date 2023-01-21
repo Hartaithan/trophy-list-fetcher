@@ -75,7 +75,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const cheerio = load(content.body);
 
-  const title = cheerio("title").text();
+  let title = cheerio("title").text();
+  if (title.includes("PSNProfiles.com")) {
+    title = title.replace("• PSNProfiles.com", "");
+    title = title.replace("Trophies", "").trim();
+  }
 
   const listsEl = cheerio(selectors.list);
   let lists: Object[] = [];
