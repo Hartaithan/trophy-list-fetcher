@@ -1,4 +1,3 @@
-import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { NextPage } from "next";
 import { FormEventHandler } from "react";
@@ -29,18 +28,10 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Trophy List Fetcher</title>
-        <meta name="description" content="Trophy List Fetcher" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}>
-        <form className={styles.form} onSubmit={onSubmit}>
-          <input className={styles.input} name="url" placeholder="Enter URL" />
-          <input className={styles.input} value="Submit" type="submit" />
-        </form>
-      </main>
+      <form className={styles.form} onSubmit={onSubmit}>
+        <input className={styles.input} name="url" placeholder="Enter URL" />
+        <input className={styles.input} value="Submit" type="submit" />
+      </form>
     </>
   );
 };

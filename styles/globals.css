@@ -1,7 +1,7 @@
 * {
   padding: 0;
   margin: 0;
-  color: white;
+  color: #ffffff;
   box-sizing: border-box;
 }
 
@@ -10,7 +10,7 @@ body,
 #__next {
   height: 100%;
   width: 100%;
-  background: black;
+  background: #000000;
 }
 
 #__next {
@@ -21,4 +21,7 @@ body,
 main {
   padding: 24px 0;
   flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
