@@ -10,11 +10,57 @@
 
 .table {
   background: #121212;
-  padding: 10px;
+  padding: 2px;
   border-radius: 8px;
   font-size: 10px;
 }
 
-.table > tr > td {
+.table > tbody > tr > td {
+  padding: 4px 8px;
+}
+
+.select {
+  min-height: 30px;
+  border-radius: 6px;
   padding: 5px 10px;
+  background: #121212;
+  color: #ffffff;
+  border: none;
+  outline: none;
+}
+
+.select:has(option:disabled:checked[hidden]) {
+  color: #808080;
+}
+
+.rows {
+  display: flex;
+  padding: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  padding: 5px 10px;
+  background: #121212;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.row:last-child {
+  margin-right: 0px;
+}
+
+.rowDelete {
+  cursor: pointer;
+  background: #5b5b5b;
+  width: 15px;
+  height: 15px;
+  font-size: 10px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 100%;
+  margin-left: 5px;
 }
