@@ -18,7 +18,8 @@ const selectors = {
 
 const getContent = async (
   example: string | string[] | undefined,
-  url: string
+  url: string,
+  lang: string
 ): Promise<any> => {
   let content = null;
   switch (!!example) {
@@ -31,7 +32,7 @@ const getContent = async (
       content = JSON.parse(data);
       break;
     default:
-      const payload = { url };
+      const payload = { url: url + "?lang=" + lang };
       content = await fetch(SCRAPE_URL, {
         method: "POST",
         body: JSON.stringify(payload),
@@ -61,17 +62,21 @@ const getTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { url, example } = req.query;
+  const { url, lang = "ru", example } = req.query;
 
   if (!API_URL || !SCRAPE_URL || !API_KEY || !HOST) {
     return res.status(400).json({ message: "Unable to get env variables" });
   }
 
-  if (typeof url !== "string") {
+  if (typeof url !== "string" || !url) {
     return res.status(400).json({ message: "Invalid url format" });
   }
 
-  const content = await getContent(example, url);
+  if (typeof lang !== "string") {
+    return res.status(400).json({ message: "Invalid lang format" });
+  }
+
+  const content = await getContent(example, url, lang);
 
   const cheerio = load(content.body);
 

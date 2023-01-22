@@ -14,7 +14,7 @@
   margin-bottom: 10px;
 }
 
-.input:last-of-type {
+.input:last-child {
   margin-bottom: 0;
 }
 
