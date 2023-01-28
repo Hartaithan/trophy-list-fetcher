@@ -6,7 +6,7 @@ const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL!;
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY!;
 const HOST = process.env.NEXT_PUBLIC_HOST!;
 
-const selectors = {
+const select = {
   list: "#content > div.row > div.col-xs > div.box.no-top-border",
   table: "table.zebra",
   tableRows: "tbody > tr",
@@ -50,8 +50,8 @@ const getContent = async (
 const getTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
   let trophies: Object[] = [];
   rows.each((_, row) => {
-    const content = cheerio(row).find(selectors.trophyContent).first();
-    const type = cheerio(row).find(selectors.trophyType).attr("title");
+    const content = cheerio(row).find(select.trophyContent).first();
+    const type = cheerio(row).find(select.trophyType).attr("title");
     const name = content.find("a").text().trim();
     const description = content.contents().last().text().trim();
     if (name.length !== 0 && description.length !== 0) {
@@ -86,27 +86,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     title = title.replace("Trophies", "").trim();
   }
 
-  const listsEl = cheerio(selectors.list);
+  const listsEl = cheerio(select.list);
   let lists: Object[] = [];
 
-  // NO DLC LISTS
-  if (listsEl.length === 1) {
-    const name = "Base Game";
-    const table = listsEl.first().find(selectors.table);
-    const rows = table.find(selectors.tableRows);
-    const trophies = getTrophyList(cheerio, rows);
-    const count = trophies.length;
-    lists.push({ name, count, trophies });
-
-    return res.status(200).json({ title, lists });
-  }
-
-  // HAVE DLC LISTS
   listsEl.each((_, list) => {
-    const nameRow = cheerio(list).find(selectors.nameRow);
-    const name = cheerio(nameRow).find(selectors.name).text().trim();
-    const table = nameRow.next();
-    const rows = table.find(selectors.tableRows);
+    const haveDLC = listsEl.length > 1;
+    const nameRow = cheerio(list).find(select.nameRow);
+    const name = haveDLC
+      ? cheerio(nameRow).find(select.name).text().trim()
+      : "Base Game";
+    const table = haveDLC ? nameRow.next() : listsEl.first().find(select.table);
+    const rows = table.find(select.tableRows);
     const trophies = getTrophyList(cheerio, rows);
     const count = trophies.length;
     lists.push({ name, count, trophies });
