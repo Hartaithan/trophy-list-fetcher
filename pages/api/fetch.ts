@@ -15,6 +15,8 @@ const select = {
   trophyContent: "td:nth-child(2)",
   trophyType: "td:nth-child(6) > span > img",
   platform: "span.platform",
+  thumbnail: "picture.game > img",
+  cover: "div#first-banner > div.img",
 };
 
 const getContent = async (
@@ -90,6 +92,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const platforms = cheerio(select.platform);
   const platform = platforms.first().text().toUpperCase();
 
+  const thumbnail = cheerio(select.thumbnail).first().attr("src");
+
+  let cover = cheerio(select.cover).attr("style") || null;
+  if (cover !== null) {
+    cover = cover.replace(/.*\(|\).*/g, "");
+  }
+
   const listsEl = cheerio(select.list);
   let lists: Object[] = [];
 
@@ -106,7 +115,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     lists.push({ name, count, trophies });
   });
 
-  return res.status(200).json({ title, platform, lists });
+  return res.status(200).json({ title, platform, thumbnail, cover, lists });
 };
 
 export default handler;

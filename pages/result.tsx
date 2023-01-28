@@ -23,6 +23,9 @@ interface IList {
 interface IResult {
   title: string;
   lists: IList[];
+  platform: string;
+  thumbnail: string;
+  cover: string | null;
   message: string | null;
 }
 
