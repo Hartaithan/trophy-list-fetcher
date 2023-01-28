@@ -14,6 +14,7 @@ const select = {
   nameRow: "table[style='border-bottom: 1px solid #dfdfdf;']",
   trophyContent: "td:nth-child(2)",
   trophyType: "td:nth-child(6) > span > img",
+  platform: "span.platform",
 };
 
 const getContent = async (
@@ -86,6 +87,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     title = title.replace("Trophies", "").trim();
   }
 
+  const platforms = cheerio(select.platform);
+  const platform = platforms.first().text().toUpperCase();
+
   const listsEl = cheerio(select.list);
   let lists: Object[] = [];
 
@@ -102,7 +106,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     lists.push({ name, count, trophies });
   });
 
-  return res.status(200).json({ title, lists });
+  return res.status(200).json({ title, platform, lists });
 };
 
 export default handler;
