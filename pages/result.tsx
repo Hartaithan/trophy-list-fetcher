@@ -1,3 +1,4 @@
+import { IResult, IRow } from "@/models/ResultModal";
 import styles from "@/styles/Result.module.css";
 import {
   GetServerSideProps,
@@ -8,35 +9,8 @@ import { ChangeEventHandler, useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-interface ITrophy {
-  name: string;
-  description: string;
-  type: string;
-}
-
-interface IList {
-  name: string;
-  count: number;
-  trophies: ITrophy[];
-}
-
-interface IResult {
-  title: string;
-  lists: IList[];
-  platform: string;
-  thumbnail: string;
-  cover: string | null;
-  message: string | null;
-}
-
 interface IResultPageProps {
   result: IResult;
-}
-
-interface IRow {
-  id: number;
-  value: string;
-  label: string;
 }
 
 const options: IRow[] = [
