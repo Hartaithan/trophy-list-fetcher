@@ -56,8 +56,8 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
     };
   }
   try {
-    const result = await fetch(API_URL + `/fetch?url=${url}`).then((res) =>
-      res.json()
+    const result = await fetch(API_URL + `/fetch?url=${url}&example=true`).then(
+      (res) => res.json()
     );
     return {
       props: { result },
@@ -111,71 +111,101 @@ const ResultPage: NextPage<
 
   return (
     <>
-      <div className={styles.titleWrapper}>
-        <h3 className={styles.title}>{props.result.title}</h3>
-        <input type="checkbox" checked={complete} onChange={onChange} />
-      </div>
-      <select
-        className={styles.select}
-        placeholder="Select table rows"
-        onChange={addRow}
-      >
-        <option
-          disabled
-          hidden
-          selected
-          label="Select table rows"
-          defaultValue={undefined}
+      <div className={styles.profile}>
+        <div
+          className={styles.cover}
+          style={{
+            backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,1) 95%, rgba(0,0,0,1) 100%), url('${props.result.cover}')`,
+          }}
         />
-        {options.map((option) => (
-          <option key={option.id} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <div className={styles.rows}>
-        {rows.map((row) => (
-          <div className={styles.row} key={row.id}>
-            {row.label}
-            <p className={styles.rowDelete} onClick={() => deleteRow(row)}>
-              ✖
-            </p>
-          </div>
-        ))}
+        <img
+          className={styles.thumbnail}
+          alt={props.result.title}
+          src={props.result.thumbnail}
+        />
       </div>
-      <table className={styles.table}>
-        <tbody>
-          {props.result.lists.map((list) =>
-            list.trophies.map((trophy, index) => {
-              if (trophy.type === "Platinum") {
-                return null;
-              }
-              return (
-                <tr key={trophy.name + index}>
-                  {rows.some((row) => row.value === options[0].value) && (
-                    <td>{complete ? "YES" : "NO"}</td>
-                  )}
-                  {rows.some((row) => row.value === options[1].value) && (
-                    <td>{trophy.name}</td>
-                  )}
-                  {rows.some((row) => row.value === options[2].value) && (
-                    <td>{trophy.description}</td>
-                  )}
-                  {rows.some((row) => row.value === options[3].value) && (
-                    <td>{list.name}</td>
-                  )}
-                  {rows.some((row) => row.value === options[4].value) && (
-                    <td>{trophy.type}</td>
-                  )}
-                  {rows.some((row) => row.value === options[5].value) && (
-                    <td>{list.name === "Base Game" ? "YES" : "NO"}</td>
-                  )}
-                </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
+      <div className={styles.contentWrapper}>
+        <div className={styles.contentRow}>
+          <h3 className={styles.title}>{props.result.title}</h3>
+          <div className={styles.platform}>
+            <p className={styles.platformValue}>{props.result.platform}</p>
+          </div>
+          <div className={styles.completeWrapper}>
+            <input
+              id="complete"
+              type="checkbox"
+              checked={complete}
+              onChange={onChange}
+            />
+            <label className={styles.completeLabel} htmlFor="complete">
+              Toggle Completion
+            </label>
+          </div>
+        </div>
+      </div>
+      <div className={styles.container}>
+        <select
+          className={styles.select}
+          placeholder="Select table rows"
+          onChange={addRow}
+        >
+          <option
+            disabled
+            hidden
+            selected
+            label="Select table rows"
+            defaultValue={undefined}
+          />
+          {options.map((option) => (
+            <option key={option.id} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <div className={styles.rows}>
+          {rows.map((row) => (
+            <div className={styles.row} key={row.id}>
+              {row.label}
+              <p className={styles.rowDelete} onClick={() => deleteRow(row)}>
+                ✖
+              </p>
+            </div>
+          ))}
+        </div>
+        <table className={styles.table}>
+          <tbody>
+            {props.result.lists.map((list) =>
+              list.trophies.map((trophy, index) => {
+                if (trophy.type === "Platinum") {
+                  return null;
+                }
+                return (
+                  <tr key={trophy.name + index}>
+                    {rows.some((row) => row.value === options[0].value) && (
+                      <td>{complete ? "YES" : "NO"}</td>
+                    )}
+                    {rows.some((row) => row.value === options[1].value) && (
+                      <td>{trophy.name}</td>
+                    )}
+                    {rows.some((row) => row.value === options[2].value) && (
+                      <td>{trophy.description}</td>
+                    )}
+                    {rows.some((row) => row.value === options[3].value) && (
+                      <td>{list.name}</td>
+                    )}
+                    {rows.some((row) => row.value === options[4].value) && (
+                      <td>{trophy.type}</td>
+                    )}
+                    {rows.some((row) => row.value === options[5].value) && (
+                      <td>{list.name === "Base Game" ? "YES" : "NO"}</td>
+                    )}
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };
