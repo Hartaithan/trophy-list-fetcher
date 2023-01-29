@@ -5,6 +5,7 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import Image from "next/image";
 import { ChangeEventHandler, useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -56,8 +57,8 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
     };
   }
   try {
-    const result = await fetch(API_URL + `/fetch?url=${url}&example=true`).then(
-      (res) => res.json()
+    const result = await fetch(API_URL + `/fetch?url=${url}`).then((res) =>
+      res.json()
     );
     return {
       props: { result },
@@ -112,16 +113,25 @@ const ResultPage: NextPage<
   return (
     <>
       <div className={styles.profile}>
-        <div
+        <div className={styles.overlay} />
+        <Image
+          fill
+          placeholder="blur"
           className={styles.cover}
-          style={{
-            backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,1) 95%, rgba(0,0,0,1) 100%), url('${props.result.cover}')`,
-          }}
+          blurDataURL="/placeholder.jpg"
+          alt={props.result.title + " cover"}
+          src={props.result.cover || "/placeholder.png"}
         />
-        <img
+        <Image
+          priority
+          width={320}
+          height={120}
+          quality={100}
+          placeholder="blur"
+          blurDataURL="/placeholder.jpg"
           className={styles.thumbnail}
-          alt={props.result.title}
-          src={props.result.thumbnail}
+          src={props.result.thumbnail || "/placeholder.png"}
+          alt={props.result.title + " thumbnail"}
         />
       </div>
       <div className={styles.contentWrapper}>
