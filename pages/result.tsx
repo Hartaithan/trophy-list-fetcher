@@ -124,7 +124,7 @@ const ResultPage: NextPage<
         />
         <Image
           priority
-          width={320}
+          width={200}
           height={120}
           quality={100}
           placeholder="blur"
