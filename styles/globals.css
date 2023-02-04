@@ -28,3 +28,7 @@ main {
   align-items: center;
   padding-bottom: 20px;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
