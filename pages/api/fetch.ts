@@ -15,7 +15,7 @@ const select = {
   trophyContent: "td:nth-child(2)",
   trophyType: "td:nth-child(6) > span > img",
   platform: "span.platform",
-  thumbnail: "picture.game > img",
+  thumbnail: "div.game-image-holder",
   cover: "div#first-banner > div.img",
 };
 
@@ -92,7 +92,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const platforms = cheerio(select.platform);
   const platform = platforms.first().text().toUpperCase();
 
-  const thumbnail = cheerio(select.thumbnail).first().attr("src");
+  const thumbnail = cheerio(select.thumbnail).find("img").attr("src");
 
   let cover = cheerio(select.cover).attr("style") || null;
   if (cover !== null) {
