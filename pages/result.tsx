@@ -112,7 +112,7 @@ const ResultPage: NextPage<
 
   return (
     <>
-      <div className={styles.profile}>
+      <div className={styles.banner}>
         <div className={styles.overlay} />
         <Image
           fill
@@ -122,6 +122,8 @@ const ResultPage: NextPage<
           alt={props.result.title + " cover"}
           src={props.result.cover || "/placeholder.png"}
         />
+      </div>
+      <div className={styles.content}>
         <Image
           priority
           width={200}
@@ -133,14 +135,12 @@ const ResultPage: NextPage<
           src={props.result.thumbnail || "/placeholder.png"}
           alt={props.result.title + " thumbnail"}
         />
-      </div>
-      <div className={styles.contentWrapper}>
-        <div className={styles.contentRow}>
+        <div className={styles.info}>
           <h3 className={styles.title}>{props.result.title}</h3>
-          <div className={styles.platform}>
-            <p className={styles.platformValue}>{props.result.platform}</p>
+          <div className={styles.platformContainer}>
+            <p className={styles.platform}>{props.result.platform}</p>
           </div>
-          <div className={styles.completeWrapper}>
+          <div className={styles.completeContainer}>
             <input
               id="complete"
               type="checkbox"
@@ -152,35 +152,35 @@ const ResultPage: NextPage<
             </label>
           </div>
         </div>
-      </div>
-      <div className={styles.container}>
-        <select
-          className={styles.select}
-          placeholder="Select table rows"
-          onChange={addRow}
-        >
-          <option
-            disabled
-            hidden
-            selected
-            label="Select table rows"
-            defaultValue={undefined}
-          />
-          {options.map((option) => (
-            <option key={option.id} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <div className={styles.rows}>
-          {rows.map((row) => (
-            <div className={styles.row} key={row.id}>
-              {row.label}
-              <p className={styles.rowDelete} onClick={() => deleteRow(row)}>
-                ✖
-              </p>
-            </div>
-          ))}
+        <div className={styles.rowPicker}>
+          <select
+            className={styles.select}
+            placeholder="Select table rows"
+            onChange={addRow}
+          >
+            <option
+              disabled
+              hidden
+              selected
+              label="Select table rows"
+              defaultValue={undefined}
+            />
+            {options.map((option) => (
+              <option key={option.id} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <div className={styles.rowsList}>
+            {rows.map((row) => (
+              <div className={styles.rowItem} key={row.id}>
+                {row.label}
+                <p className={styles.rowDelete} onClick={() => deleteRow(row)}>
+                  ✖
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
         <table className={styles.table}>
           <tbody>
