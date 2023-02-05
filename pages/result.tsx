@@ -57,8 +57,8 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
     };
   }
   try {
-    const result = await fetch(API_URL + `/fetch?url=${url}`).then((res) =>
-      res.json()
+    const result = await fetch(API_URL + `/fetch?url=${url}&example=true`).then(
+      (res) => res.json()
     );
     return {
       props: { result },
