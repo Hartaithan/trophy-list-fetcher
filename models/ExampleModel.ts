@@ -5,3 +5,11 @@ export enum EXAMPLE_TARGET {
   DLC = "dlc",
   NoPlatinum = "no-platinum",
 }
+
+export enum SEARCH_RESULTS {
+  One = "search-one",
+  Two = "search-two",
+  Three = "search-three",
+  Four = "search-four",
+  Five = "search-five",
+}
