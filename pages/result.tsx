@@ -1,4 +1,5 @@
-import { IResult, IRow } from "@/models/ResultModal";
+import { EXAMPLE_TARGET } from "@/models/ExampleModel";
+import { IResult, IRow } from "@/models/ResultModel";
 import styles from "@/styles/Result.module.css";
 import {
   GetServerSideProps,
@@ -9,6 +10,11 @@ import Image from "next/image";
 import { ChangeEventHandler, useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const isExample: { value: boolean; target: EXAMPLE_TARGET | boolean } = {
+  value: false,
+  target: EXAMPLE_TARGET.Base,
+};
 
 interface IResultPageProps {
   result: IResult;
@@ -57,8 +63,12 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
     };
   }
   try {
-    const result = await fetch(API_URL + `/fetch?url=${url}`).then((res) =>
-      res.json()
+    let example = "";
+    if (isExample.value) {
+      example = `&example=${isExample.target}`;
+    }
+    const result = await fetch(API_URL + `/fetch?url=${url}${example}`).then(
+      (res) => res.json()
     );
     return {
       props: { result },
