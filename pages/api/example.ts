@@ -3,6 +3,20 @@ import { promises as fs } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { EXAMPLE_TARGET, SEARCH_RESULTS } from "@/models/ExampleModel";
 
+const pickTrophiesExample = (query: EXAMPLE_TARGET) => {
+  if (!Object.values(EXAMPLE_TARGET).includes(query)) {
+    return "/base.json";
+  }
+  return `/${query}.json`;
+};
+
+const pickSearchExample = (query: SEARCH_RESULTS) => {
+  if (!Object.values(SEARCH_RESULTS).includes(query)) {
+    return "/search-one.json";
+  }
+  return `/${query}.json`;
+};
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { query, search } = req.query as {
     query: EXAMPLE_TARGET;
@@ -10,48 +24,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   };
   let filename = "";
   if (query && !search) {
-    switch (query) {
-      case EXAMPLE_TARGET.PS4:
-        filename = "/ps4.json";
-        break;
-      case EXAMPLE_TARGET.PS5:
-        filename = "/ps5.json";
-        break;
-      case EXAMPLE_TARGET.Base:
-        filename = "/base.json";
-        break;
-      case EXAMPLE_TARGET.DLC:
-        filename = "/dlc.json";
-        break;
-      case EXAMPLE_TARGET.NoPlatinum:
-        filename = "/no-platinum.json";
-        break;
-      default:
-        filename = "/base.json";
-        break;
-    }
+    filename = pickTrophiesExample(query);
   }
   if (!query && search) {
-    switch (search) {
-      case SEARCH_RESULTS.One:
-        filename = "/search-one.json";
-        break;
-      case SEARCH_RESULTS.Two:
-        filename = "/search-two.json";
-        break;
-      case SEARCH_RESULTS.Three:
-        filename = "/search-three.json";
-        break;
-      case SEARCH_RESULTS.Four:
-        filename = "/search-four.json";
-        break;
-      case SEARCH_RESULTS.Five:
-        filename = "/search-five.json";
-        break;
-      default:
-        filename = "/search-one.json";
-        break;
-    }
+    filename = pickSearchExample(search);
   }
   if (query && search) {
     return res.status(400).json({
