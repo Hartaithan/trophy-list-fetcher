@@ -13,6 +13,7 @@ const select = {
   query: "h3#breadCrumbs",
   resultRows: "table.zebra > tbody > tr",
   resultName: "td:nth-child(2) > a",
+  platforms: "td:nth-child(2) > div.platforms > span.platform",
 };
 
 interface ISearchQueries {
@@ -73,10 +74,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   resultRows.each((index, result) => {
     const nameElement = cheerio(result).find(select.resultName);
-    const name = nameElement.text();
-    const platforms = [""];
+    const name = nameElement.text().trim();
     const url = BASE_URL + nameElement.attr("href");
-    results.push({ id: index + 1, name, platforms, url });
+
+    let platforms: string[] = [];
+    const platformsTags = cheerio(result).find(select.platforms);
+    platformsTags.each((_, platform) => {
+      const value = cheerio(platform).text();
+      if (value) {
+        platforms.push(value);
+      }
+    });
+    results.push({ id: index + 1, name, url, platforms });
   });
 
   return res.status(200).json({ query, resultQuery, results });
