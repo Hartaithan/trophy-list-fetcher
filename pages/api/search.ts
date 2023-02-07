@@ -8,6 +8,10 @@ const API_KEY = process.env.NEXT_PUBLIC_API_KEY!;
 const HOST = process.env.NEXT_PUBLIC_HOST!;
 const SEARCH_URL = "https://psnprofiles.com/search/games?q=";
 
+const select = {
+  query: "h3#breadCrumbs",
+};
+
 interface ISearchQueries {
   [key: string]: string | string[];
   query: string;
@@ -60,7 +64,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   let results: ISearchResult[] = [];
 
-  return res.status(200).json({ query, results });
+  const resultQuery = cheerio(select.query).text().split("›").pop();
+
+  return res.status(200).json({ query, resultQuery, results });
 };
 
 export default handler;
