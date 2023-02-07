@@ -3,6 +3,12 @@ import { promises as fs } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { EXAMPLE_TARGET, SEARCH_RESULTS } from "@/models/ExampleModel";
 
+interface IExampleQueries {
+  [key: string]: string | string[];
+  query: EXAMPLE_TARGET;
+  search: SEARCH_RESULTS;
+}
+
 const pickTrophiesExample = (query: EXAMPLE_TARGET) => {
   if (!Object.values(EXAMPLE_TARGET).includes(query)) {
     return "/base.json";
@@ -18,10 +24,7 @@ const pickSearchExample = (query: SEARCH_RESULTS) => {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { query, search } = req.query as {
-    query: EXAMPLE_TARGET;
-    search: SEARCH_RESULTS;
-  };
+  const { query, search } = req.query as IExampleQueries;
   let filename = "";
   if (query && !search) {
     filename = pickTrophiesExample(query);

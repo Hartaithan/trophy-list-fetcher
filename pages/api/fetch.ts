@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Cheerio, CheerioAPI, load, Element } from "cheerio";
-import { EXAMPLE_TARGET } from "@/models/ExampleModel";
+import { EXAMPLE_TARGET, SEARCH_RESULTS } from "@/models/ExampleModel";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL!;
@@ -20,50 +20,39 @@ const select = {
   cover: "div#first-banner > div.img",
 };
 
+interface IFetchQueries {
+  [key: string]: string | string[];
+  url: string;
+  lang: string;
+  example: EXAMPLE_TARGET;
+}
+
 const getContent = async (
-  example: string | string[] | undefined,
+  example: EXAMPLE_TARGET,
   url: string,
   lang: string
 ): Promise<any> => {
   let content = null;
-  switch (!!example) {
-    case true:
-      let exampleUrl = "/example";
-      switch (example) {
-        case EXAMPLE_TARGET.PS4:
-          exampleUrl += "?query=ps4";
-          break;
-        case EXAMPLE_TARGET.PS5:
-          exampleUrl += "?query=ps5";
-          break;
-        case EXAMPLE_TARGET.Base:
-          exampleUrl += "?query=base";
-          break;
-        case EXAMPLE_TARGET.DLC:
-          exampleUrl += "?query=dlc";
-          break;
-        case EXAMPLE_TARGET.NoPlatinum:
-          exampleUrl += "?query=no-platinum";
-          break;
-        default:
-          exampleUrl += "?query=true";
-          break;
-      }
-      const data = await fetch(API_URL + exampleUrl).then((res) => res.json());
-      content = JSON.parse(data);
-      break;
-    default:
-      const payload = { url: url + "?lang=" + lang };
-      content = await fetch(SCRAPE_URL, {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-          "X-RapidAPI-Key": API_KEY,
-          "X-RapidAPI-Host": HOST,
-        },
-      }).then((res) => res.json());
-      break;
+  if (!!example) {
+    let exampleUrl = "/example";
+    if (!Object.values(EXAMPLE_TARGET).includes(example)) {
+      exampleUrl += "?query=true";
+    } else {
+      exampleUrl += `?query=${example}`;
+    }
+    const data = await fetch(API_URL + exampleUrl).then((res) => res.json());
+    content = JSON.parse(data);
+  } else {
+    const payload = { url: url + "?lang=" + lang };
+    content = await fetch(SCRAPE_URL, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": API_KEY,
+        "X-RapidAPI-Host": HOST,
+      },
+    }).then((res) => res.json());
   }
   return content;
 };
@@ -83,7 +72,7 @@ const getTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { url, lang = "ru", example } = req.query;
+  const { url, lang = "ru", example } = req.query as IFetchQueries;
 
   if (!API_URL || !SCRAPE_URL || !API_KEY || !HOST) {
     return res.status(400).json({ message: "Unable to get env variables" });
