@@ -6,10 +6,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL!;
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY!;
 const HOST = process.env.NEXT_PUBLIC_HOST!;
-const SEARCH_URL = "https://psnprofiles.com/search/games?q=";
+const BASE_URL = "https://psnprofiles.com";
+const SEARCH_URL = "/search/games?q=";
 
 const select = {
   query: "h3#breadCrumbs",
+  resultRows: "table.zebra > tbody > tr",
+  resultName: "td:nth-child(2) > a",
 };
 
 interface ISearchQueries {
@@ -37,7 +40,7 @@ const getContent = async (query: string, example: SEARCH_RESULTS) => {
     const data = await fetch(API_URL + exampleUrl).then((res) => res.json());
     content = JSON.parse(data);
   } else {
-    const payload = { url: SEARCH_URL + encodeURI(query) };
+    const payload = { url: BASE_URL + SEARCH_URL + encodeURI(query) };
     content = await fetch(SCRAPE_URL, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -65,6 +68,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   let results: ISearchResult[] = [];
 
   const resultQuery = cheerio(select.query).text().split("›").pop();
+
+  const resultRows = cheerio(select.resultRows);
+
+  resultRows.each((index, result) => {
+    const nameElement = cheerio(result).find(select.resultName);
+    const name = nameElement.text();
+    const platforms = [""];
+    const url = BASE_URL + nameElement.attr("href");
+    results.push({ id: index + 1, name, platforms, url });
+  });
 
   return res.status(200).json({ query, resultQuery, results });
 };
