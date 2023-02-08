@@ -1,4 +1,5 @@
 import { SEARCH_RESULTS } from "@/models/ExampleModel";
+import { ISearchResult } from "@/models/SearchModel";
 import { load } from "cheerio";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -20,13 +21,6 @@ interface ISearchQueries {
   [key: string]: string | string[];
   query: string;
   example: SEARCH_RESULTS;
-}
-
-interface ISearchResult {
-  id: number;
-  name: string;
-  platforms: string[];
-  url: string;
 }
 
 const getContent = async (query: string, example: SEARCH_RESULTS) => {
