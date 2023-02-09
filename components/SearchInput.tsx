@@ -18,10 +18,19 @@ type HTMLInputProps = DetailedHTMLProps<
 interface IInputProps extends HTMLInputProps {
   isLoading: boolean;
   suggestions: ISearchResult[];
+  onSuggestClick: (item: ISearchResult) => void;
 }
 
 const SearchInput: FC<IInputProps> = (props) => {
-  const { isLoading, suggestions, onFocus, onBlur, onChange, ...rest } = props;
+  const {
+    isLoading,
+    suggestions,
+    onSuggestClick,
+    onFocus,
+    onBlur,
+    onChange,
+    ...rest
+  } = props;
   const [isShow, setShow] = useState(false);
 
   const handleFocus: FocusEventHandler<HTMLInputElement> = (e) => {
@@ -62,7 +71,11 @@ const SearchInput: FC<IInputProps> = (props) => {
             <Loader width={80} height={80} />
           ) : (
             suggestions.map((suggest) => (
-              <div key={suggest.id} className={styles.suggestion}>
+              <div
+                key={suggest.id}
+                className={styles.suggestion}
+                onMouseDown={() => onSuggestClick(suggest)}
+              >
                 <p className={styles.name}>{suggest.name}</p>
                 <p className={styles.platform}>{suggest.platforms.join(",")}</p>
               </div>
