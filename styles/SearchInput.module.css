@@ -1,0 +1,45 @@
+.wrapper {
+  position: relative;
+  padding: 0;
+}
+
+.wrapper > input {
+  margin-bottom: 0;
+}
+
+.suggestions {
+  position: absolute;
+  top: 120%;
+  display: flex;
+  flex-direction: column;
+  background: #121212;
+  border-radius: 6px;
+  width: 100%;
+  min-height: 100px;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.loader {
+  justify-content: center;
+  align-items: center;
+}
+
+.suggestion {
+  padding: 6px 8px;
+}
+
+.suggestion:hover {
+  background: #2a2a2a;
+  cursor: pointer;
+}
+
+.name {
+  font-size: 12px;
+}
+
+.platform {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #969696;
+}
