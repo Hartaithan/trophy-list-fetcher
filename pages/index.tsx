@@ -103,10 +103,8 @@ const Home: NextPage = () => {
           isLoading={results.isLoading}
           onSuggestClick={handleSuggestion}
         />
-        <select className={styles.input} name="lang">
-          <option value="ru" selected>
-            Russian
-          </option>
+        <select className={styles.input} defaultValue="ru" name="lang">
+          <option value="ru">Russian</option>
           <option value="en">English</option>
         </select>
         <input className={styles.input} value="Submit" type="submit" />
