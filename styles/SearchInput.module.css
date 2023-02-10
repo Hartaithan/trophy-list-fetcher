@@ -1,5 +1,9 @@
 .wrapper {
   position: relative;
+}
+
+#__next,
+.wrapper {
   padding: 0;
 }
 
