@@ -1,3 +1,4 @@
+import Copy from "@/icons/Copy";
 import { EXAMPLE_TARGET } from "@/models/ExampleModel";
 import { IResult, IRow } from "@/models/ResultModel";
 import styles from "@/styles/Result.module.css";
@@ -111,6 +112,14 @@ const ResultPage: NextPage<
     setRows(filtered);
   };
 
+  const copyThumbnail = () => {
+    if (navigator && props.result.thumbnail) {
+      navigator.clipboard.writeText(props.result.thumbnail);
+    } else {
+      console.error("there is nothing to copy :(");
+    }
+  };
+
   if (!props.result.lists) {
     return (
       <>
@@ -134,17 +143,28 @@ const ResultPage: NextPage<
         />
       </div>
       <div className={styles.content}>
-        <Image
-          priority
-          width={200}
-          height={120}
-          quality={100}
-          placeholder="blur"
-          blurDataURL="/placeholder.jpg"
-          className={styles.thumbnail}
-          src={props.result.thumbnail || "/placeholder.png"}
-          alt={props.result.title + " thumbnail"}
-        />
+        <div className={styles.thumbnailContainer}>
+          <div id="overlay" className={styles.thumbnailOverlay}>
+            <Copy
+              className={styles.copy}
+              onClick={copyThumbnail}
+              width={48}
+              height={48}
+              color="#FFF"
+            />
+          </div>
+          <Image
+            priority
+            width={200}
+            height={120}
+            quality={100}
+            placeholder="blur"
+            blurDataURL="/placeholder.jpg"
+            className={styles.thumbnail}
+            src={props.result.thumbnail || "/placeholder.png"}
+            alt={props.result.title + " thumbnail"}
+          />
+        </div>
         <div className={styles.info}>
           <h3 className={styles.title}>{props.result.title}</h3>
           <div className={styles.platformContainer}>

@@ -32,23 +32,49 @@
 
 .content {
   position: relative;
+  top: -60px;
   width: 900px;
   flex-grow: 1;
 }
 
-.thumbnail {
-  position: absolute;
+.thumbnailContainer {
+  position: relative;
   z-index: 2;
-  top: -60px;
-  left: 0px;
-  width: auto;
-  background: #000000cc;
-  padding: 4px;
+  height: 120px;
+  width: min-content;
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.thumbnail {
+  width: auto;
+}
+
+.thumbnailOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  height: 100%;
+  width: 100%;
+  background: #000000cc;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.thumbnailContainer:hover .thumbnailOverlay {
+  opacity: 1;
+}
+
+.copy {
+  cursor: pointer;
 }
 
 .info {
-  padding: 70px 0px 10px 0px;
+  padding: 10px 0px 10px 0px;
   width: 100%;
   display: flex;
   flex-direction: row;
