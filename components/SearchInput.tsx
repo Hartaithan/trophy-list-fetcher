@@ -9,6 +9,7 @@ import {
 import styles from "@/styles/SearchInput.module.css";
 import { ISearchResult } from "@/models/SearchModel";
 import Loader from "./Loader";
+import { isLink } from "@/helpers/link";
 
 type HTMLInputProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -35,7 +36,9 @@ const SearchInput: FC<IInputProps> = (props) => {
 
   const handleFocus: FocusEventHandler<HTMLInputElement> = (e) => {
     onFocus && onFocus(e);
-    if (e.target.value.trim().length > 0) {
+    const value = e.target.value.trim();
+    const valueIsLink = isLink(value);
+    if (value.length > 0 && !valueIsLink) {
       setShow(true);
     }
   };
@@ -47,10 +50,13 @@ const SearchInput: FC<IInputProps> = (props) => {
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     onChange && onChange(e);
-    if (e.target.value.trim().length > 0 && isShow === false) {
+    const value = e.target.value.trim();
+    const valueIsLink = isLink(value);
+    const listClosed = isShow === false;
+    if (value.length > 0 && listClosed && !valueIsLink) {
       setShow(true);
     }
-    if (e.target.value.trim().length === 0) {
+    if (value.length === 0 || valueIsLink) {
       setShow(false);
     }
   };

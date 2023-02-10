@@ -11,6 +11,7 @@ import useDebounce from "@/hooks/useDebounce";
 import SearchInput from "@/components/SearchInput";
 import { ISearchResult } from "@/models/SearchModel";
 import { SEARCH_RESULTS } from "@/models/ExampleModel";
+import { isLink } from "@/helpers/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -44,7 +45,8 @@ const Home: NextPage = () => {
       if (isExample.value) {
         example = `&example=${isExample.target}`;
       }
-      if (value.length > 0) {
+      const valueIsLink = isLink(value);
+      if (value.length > 0 && !valueIsLink) {
         fetch(API_URL + `/search?query=${value}${example}`)
           .then((res) => res.json())
           .then((result) => {
