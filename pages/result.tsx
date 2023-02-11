@@ -1,5 +1,5 @@
 import Copy from "@/icons/Copy";
-import { ExampleTarget } from "@/models/ExampleModel";
+import { EXAMPLE_TARGET } from "@/models/ExampleModel";
 import { IResult, IRow } from "@/models/ResultModel";
 import styles from "@/styles/Result.module.css";
 import {
@@ -12,9 +12,9 @@ import { ChangeEventHandler, useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const isExample: { value: boolean; target: ExampleTarget | boolean } = {
+const isExample: { value: boolean; target: EXAMPLE_TARGET | boolean } = {
   value: false,
-  target: ExampleTarget.Base,
+  target: EXAMPLE_TARGET.Base,
 };
 
 interface IResultPageProps {

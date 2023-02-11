@@ -1,23 +1,23 @@
 import path from "path";
 import { promises as fs } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ExampleTarget, SearchResults } from "@/models/ExampleModel";
+import { EXAMPLE_TARGET, SEARCH_RESULTS } from "@/models/ExampleModel";
 
 interface IExampleQueries {
   [key: string]: string | string[];
-  query: ExampleTarget;
-  search: SearchResults;
+  query: EXAMPLE_TARGET;
+  search: SEARCH_RESULTS;
 }
 
-const pickTrophiesExample = (query: ExampleTarget) => {
-  if (!Object.values(ExampleTarget).includes(query)) {
+const pickTrophiesExample = (query: EXAMPLE_TARGET) => {
+  if (!Object.values(EXAMPLE_TARGET).includes(query)) {
     return "/base.json";
   }
   return `/${query}.json`;
 };
 
-const pickSearchExample = (query: SearchResults) => {
-  if (!Object.values(SearchResults).includes(query)) {
+const pickSearchExample = (query: SEARCH_RESULTS) => {
+  if (!Object.values(SEARCH_RESULTS).includes(query)) {
     return "/search-one.json";
   }
   return `/${query}.json`;

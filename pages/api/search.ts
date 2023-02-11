@@ -1,4 +1,4 @@
-import { SearchResults } from "@/models/ExampleModel";
+import { SEARCH_RESULTS } from "@/models/ExampleModel";
 import { ISearchResult } from "@/models/SearchModel";
 import { load } from "cheerio";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -20,14 +20,14 @@ const select = {
 interface ISearchQueries {
   [key: string]: string | string[];
   query: string;
-  example: SearchResults;
+  example: SEARCH_RESULTS;
 }
 
-const getContent = async (query: string, example: SearchResults) => {
+const getContent = async (query: string, example: SEARCH_RESULTS) => {
   let content = null;
   if (example) {
     let exampleUrl = "/example";
-    if (!Object.values(SearchResults).includes(example)) {
+    if (!Object.values(SEARCH_RESULTS).includes(example)) {
       exampleUrl += "?search=true";
     } else {
       exampleUrl += `?search=${example}`;

@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import useDebounce from "@/hooks/useDebounce";
 import SearchInput from "@/components/SearchInput";
 import { ISearchResult } from "@/models/SearchModel";
-import { SearchResults } from "@/models/ExampleModel";
+import { SEARCH_RESULTS } from "@/models/ExampleModel";
 import { isLink } from "@/helpers/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -25,9 +25,9 @@ interface IResultsState {
   list: ISearchResult[];
 }
 
-const isExample: { value: boolean; target: SearchResults | boolean } = {
+const isExample: { value: boolean; target: SEARCH_RESULTS | boolean } = {
   value: false,
-  target: SearchResults.One,
+  target: SEARCH_RESULTS.One,
 };
 
 const Home: NextPage = () => {

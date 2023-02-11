@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Cheerio, CheerioAPI, load, Element } from "cheerio";
-import { ExampleTarget } from "@/models/ExampleModel";
+import { EXAMPLE_TARGET } from "@/models/ExampleModel";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL!;
@@ -24,18 +24,18 @@ interface IFetchQueries {
   [key: string]: string | string[];
   url: string;
   lang: string;
-  example: ExampleTarget;
+  example: EXAMPLE_TARGET;
 }
 
 const getContent = async (
-  example: ExampleTarget,
+  example: EXAMPLE_TARGET,
   url: string,
   lang: string
 ): Promise<any> => {
   let content = null;
   if (example) {
     let exampleUrl = "/example";
-    if (!Object.values(ExampleTarget).includes(example)) {
+    if (!Object.values(EXAMPLE_TARGET).includes(example)) {
       exampleUrl += "?query=true";
     } else {
       exampleUrl += `?query=${example}`;
