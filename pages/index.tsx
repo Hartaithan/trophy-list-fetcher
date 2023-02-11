@@ -94,7 +94,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <form className={styles.form} onSubmit={onSubmit}>
+      <form className={styles.form} onSubmit={onSubmit} autoComplete="off">
         <SearchInput
           className={styles.input}
           name="url"
@@ -104,6 +104,7 @@ const Home: NextPage = () => {
           suggestions={results.list}
           isLoading={results.isLoading}
           onSuggestClick={handleSuggestion}
+          autoComplete="off"
         />
         <select className={styles.input} defaultValue="ru" name="lang">
           <option value="ru">Russian</option>
