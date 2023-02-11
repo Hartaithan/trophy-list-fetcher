@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Cheerio, CheerioAPI, load, Element } from "cheerio";
-import { EXAMPLE_TARGET, SEARCH_RESULTS } from "@/models/ExampleModel";
+import { ExampleTarget } from "@/models/ExampleModel";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL!;
@@ -24,18 +24,18 @@ interface IFetchQueries {
   [key: string]: string | string[];
   url: string;
   lang: string;
-  example: EXAMPLE_TARGET;
+  example: ExampleTarget;
 }
 
 const getContent = async (
-  example: EXAMPLE_TARGET,
+  example: ExampleTarget,
   url: string,
   lang: string
 ): Promise<any> => {
   let content = null;
-  if (!!example) {
+  if (example) {
     let exampleUrl = "/example";
-    if (!Object.values(EXAMPLE_TARGET).includes(example)) {
+    if (!Object.values(ExampleTarget).includes(example)) {
       exampleUrl += "?query=true";
     } else {
       exampleUrl += `?query=${example}`;
@@ -43,7 +43,7 @@ const getContent = async (
     const data = await fetch(API_URL + exampleUrl).then((res) => res.json());
     content = JSON.parse(data);
   } else {
-    const payload = { url: url + "?lang=" + lang };
+    const payload = { url: `${url}?lang=${lang}` };
     content = await fetch(SCRAPE_URL, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -58,7 +58,7 @@ const getContent = async (
 };
 
 const getTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
-  let trophies: Object[] = [];
+  const trophies: Object[] = [];
   rows.each((_, row) => {
     const content = cheerio(row).find(select.trophyContent).first();
     const type = cheerio(row).find(select.trophyType).attr("title");
@@ -107,7 +107,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const listsEl = cheerio(select.list);
-  let lists: Object[] = [];
+  const lists: Object[] = [];
 
   listsEl.each((_, list) => {
     const haveDLC = listsEl.length > 1;

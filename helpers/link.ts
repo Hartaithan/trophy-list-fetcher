@@ -1,3 +1,2 @@
-export const isLink = (value: string): boolean => {
-  return value.includes("http") || value.includes("psnprofiles");
-};
+export const isLink = (value: string): boolean =>
+  value.includes("http") || value.includes("psnprofiles");

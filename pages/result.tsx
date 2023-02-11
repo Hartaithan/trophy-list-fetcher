@@ -1,5 +1,5 @@
 import Copy from "@/icons/Copy";
-import { EXAMPLE_TARGET } from "@/models/ExampleModel";
+import { ExampleTarget } from "@/models/ExampleModel";
 import { IResult, IRow } from "@/models/ResultModel";
 import styles from "@/styles/Result.module.css";
 import {
@@ -12,9 +12,9 @@ import { ChangeEventHandler, useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const isExample: { value: boolean; target: EXAMPLE_TARGET | boolean } = {
+const isExample: { value: boolean; target: ExampleTarget | boolean } = {
   value: false,
-  target: EXAMPLE_TARGET.Base,
+  target: ExampleTarget.Base,
 };
 
 interface IResultPageProps {
@@ -57,7 +57,7 @@ const options: IRow[] = [
 export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
   ctx
 ) => {
-  const url = ctx.query.url;
+  const { url } = ctx.query;
   if (!url) {
     return {
       props: { result: { message: "URL not found!" } },
@@ -68,7 +68,7 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
     if (isExample.value) {
       example = `&example=${isExample.target}`;
     }
-    const result = await fetch(API_URL + `/fetch?url=${url}${example}`).then(
+    const result = await fetch(`${API_URL}/fetch?url=${url}${example}`).then(
       (res) => res.json()
     );
     return {
@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
     };
   } catch (error) {
     return {
-      props: { result: { message: `¯\_(ツ)_/¯` } },
+      props: { result: { message: `¯\\_(ツ)_/¯` } },
     };
   }
 };
@@ -138,7 +138,7 @@ const ResultPage: NextPage<
           placeholder="blur"
           className={styles.cover}
           blurDataURL="/placeholder.jpg"
-          alt={props.result.title + " cover"}
+          alt={`${props.result.title} cover`}
           src={props.result.cover || "/placeholder.png"}
         />
       </div>
@@ -162,7 +162,7 @@ const ResultPage: NextPage<
             blurDataURL="/placeholder.jpg"
             className={styles.thumbnail}
             src={props.result.thumbnail || "/placeholder.png"}
-            alt={props.result.title + " thumbnail"}
+            alt={`${props.result.title} thumbnail`}
           />
         </div>
         <div className={styles.info}>

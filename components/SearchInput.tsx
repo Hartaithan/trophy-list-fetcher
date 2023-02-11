@@ -8,8 +8,8 @@ import {
 } from "react";
 import styles from "@/styles/SearchInput.module.css";
 import { ISearchResult } from "@/models/SearchModel";
-import Loader from "./Loader";
 import { isLink } from "@/helpers/link";
+import Loader from "./Loader";
 
 type HTMLInputProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -35,7 +35,9 @@ const SearchInput: FC<IInputProps> = (props) => {
   const [isShow, setShow] = useState(false);
 
   const handleFocus: FocusEventHandler<HTMLInputElement> = (e) => {
-    onFocus && onFocus(e);
+    if (onFocus) {
+      onFocus(e);
+    }
     const value = e.target.value.trim();
     const valueIsLink = isLink(value);
     if (value.length > 0 && !valueIsLink) {
@@ -44,12 +46,16 @@ const SearchInput: FC<IInputProps> = (props) => {
   };
 
   const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
-    onBlur && onBlur(e);
+    if (onBlur) {
+      onBlur(e);
+    }
     setShow(false);
   };
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    onChange && onChange(e);
+    if (onChange) {
+      onChange(e);
+    }
     const value = e.target.value.trim();
     const valueIsLink = isLink(value);
     const listClosed = isShow === false;

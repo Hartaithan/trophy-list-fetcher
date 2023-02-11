@@ -1,4 +1,4 @@
-import { SEARCH_RESULTS } from "@/models/ExampleModel";
+import { SearchResults } from "@/models/ExampleModel";
 import { ISearchResult } from "@/models/SearchModel";
 import { load } from "cheerio";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -20,14 +20,14 @@ const select = {
 interface ISearchQueries {
   [key: string]: string | string[];
   query: string;
-  example: SEARCH_RESULTS;
+  example: SearchResults;
 }
 
-const getContent = async (query: string, example: SEARCH_RESULTS) => {
+const getContent = async (query: string, example: SearchResults) => {
   let content = null;
-  if (!!example) {
+  if (example) {
     let exampleUrl = "/example";
-    if (!Object.values(SEARCH_RESULTS).includes(example)) {
+    if (!Object.values(SearchResults).includes(example)) {
       exampleUrl += "?search=true";
     } else {
       exampleUrl += `?search=${example}`;
@@ -60,7 +60,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const cheerio = load(content.body);
 
-  let results: ISearchResult[] = [];
+  const results: ISearchResult[] = [];
 
   const resultQuery = cheerio(select.query).text().split("›").pop();
 
@@ -71,7 +71,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const name = nameElement.text().trim();
     const url = BASE_URL + nameElement.attr("href");
 
-    let platforms: string[] = [];
+    const platforms: string[] = [];
     const platformsTags = cheerio(result).find(select.platforms);
     platformsTags.each((_, platform) => {
       const value = cheerio(platform).text();

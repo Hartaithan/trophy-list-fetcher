@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import useDebounce from "@/hooks/useDebounce";
 import SearchInput from "@/components/SearchInput";
 import { ISearchResult } from "@/models/SearchModel";
-import { SEARCH_RESULTS } from "@/models/ExampleModel";
+import { SearchResults } from "@/models/ExampleModel";
 import { isLink } from "@/helpers/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -25,9 +25,9 @@ interface IResultsState {
   list: ISearchResult[];
 }
 
-const isExample: { value: boolean; target: SEARCH_RESULTS | boolean } = {
+const isExample: { value: boolean; target: SearchResults | boolean } = {
   value: false,
-  target: SEARCH_RESULTS.One,
+  target: SearchResults.One,
 };
 
 const Home: NextPage = () => {
@@ -40,14 +40,14 @@ const Home: NextPage = () => {
 
   const handleSearch: ChangeEventHandler = useDebounce(
     async (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
+      const { value } = e.target;
       let example = "";
       if (isExample.value) {
         example = `&example=${isExample.target}`;
       }
       const valueIsLink = isLink(value);
       if (value.length > 0 && !valueIsLink) {
-        fetch(API_URL + `/search?query=${value}${example}`)
+        fetch(`${API_URL}/search?query=${value}${example}`)
           .then((res) => res.json())
           .then((result) => {
             setResults((prev) => ({

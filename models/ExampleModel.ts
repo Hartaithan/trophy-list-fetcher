@@ -1,4 +1,4 @@
-export enum EXAMPLE_TARGET {
+export enum ExampleTarget {
   PS4 = "ps4",
   PS5 = "ps5",
   Base = "base",
@@ -6,7 +6,7 @@ export enum EXAMPLE_TARGET {
   NoPlatinum = "no-platinum",
 }
 
-export enum SEARCH_RESULTS {
+export enum SearchResults {
   One = "search-one",
   Two = "search-two",
   Three = "search-three",

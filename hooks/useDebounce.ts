@@ -2,7 +2,6 @@ import { useCallback, useRef } from "react";
 
 const useDebounce = (callback: (...args: any[]) => void, delay: number) => {
   const timer = useRef<NodeJS.Timeout | null>(null);
-
   const debounceCallback = useCallback(
     (...args: any[]) => {
       if (timer.current) {
@@ -14,7 +13,6 @@ const useDebounce = (callback: (...args: any[]) => void, delay: number) => {
     },
     [callback, delay]
   );
-
   return debounceCallback;
 };
 

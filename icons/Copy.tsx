@@ -3,12 +3,11 @@ import { FC } from "react";
 
 const Copy: FC<IIconsProps> = (props) => {
   const { width = 24, height = 24, color = "#000000", ...rest } = props;
-
   return (
     <svg
       {...rest}
-      width={width + "px"}
-      height={height + "px"}
+      width={`${width}px`}
+      height={`${height}px`}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
