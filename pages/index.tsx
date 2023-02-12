@@ -93,26 +93,24 @@ const Home: NextPage = () => {
   };
 
   return (
-    <>
-      <form className={styles.form} onSubmit={onSubmit} autoComplete="off">
-        <SearchInput
-          className={styles.input}
-          name="url"
-          value={url}
-          placeholder="Search or enter URL"
-          onChange={handleInput}
-          suggestions={results.list}
-          isLoading={results.isLoading}
-          onSuggestClick={handleSuggestion}
-          autoComplete="off"
-        />
-        <select className={styles.input} defaultValue="ru" name="lang">
-          <option value="ru">Russian</option>
-          <option value="en">English</option>
-        </select>
-        <input className={styles.input} value="Submit" type="submit" />
-      </form>
-    </>
+    <form className={styles.form} onSubmit={onSubmit} autoComplete="off">
+      <SearchInput
+        className={styles.input}
+        name="url"
+        value={url}
+        placeholder="Search or enter URL"
+        onChange={handleInput}
+        suggestions={results.list}
+        isLoading={results.isLoading}
+        onSuggestClick={handleSuggestion}
+        autoComplete="off"
+      />
+      <select className={styles.input} defaultValue="ru" name="lang">
+        <option value="ru">Russian</option>
+        <option value="en">English</option>
+      </select>
+      <input className={styles.input} value="Submit" type="submit" />
+    </form>
   );
 };
 

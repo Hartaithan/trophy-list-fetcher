@@ -1,4 +1,5 @@
 import Copy from "@/icons/Copy";
+import Delete from "@/icons/Delete";
 import { EXAMPLE_TARGET } from "@/models/ExampleModel";
 import { IResult, IRow } from "@/models/ResultModel";
 import styles from "@/styles/Result.module.css";
@@ -175,7 +176,6 @@ const ResultPage: NextPage<
               onClick={copyThumbnail}
               width={48}
               height={48}
-              color="#FFF"
             />
           </div>
           <Image
@@ -208,7 +208,7 @@ const ResultPage: NextPage<
           </div>
           <button className={styles.copyTable} onClick={selectTable}>
             <p>Copy Table</p>
-            <Copy width={12} height={12} color="#FFF" />
+            <Copy width={12} height={12} />
           </button>
         </div>
         <div className={styles.rowPicker}>
@@ -234,9 +234,12 @@ const ResultPage: NextPage<
             {rows.map((row) => (
               <div className={styles.rowItem} key={row.id}>
                 {row.label}
-                <p className={styles.rowDelete} onClick={() => deleteRow(row)}>
-                  ✖
-                </p>
+                <Delete
+                  className={styles.rowDelete}
+                  width={15}
+                  height={15}
+                  onClick={() => deleteRow(row)}
+                />
               </div>
             ))}
           </div>

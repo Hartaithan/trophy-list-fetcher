@@ -162,11 +162,7 @@
 .rowDelete {
   cursor: pointer;
   background: #5b5b5b;
-  width: 15px;
-  height: 15px;
-  font-size: 10px;
-  text-align: center;
-  vertical-align: middle;
+  padding: 2px;
   border-radius: 100%;
   margin-left: 5px;
 }
