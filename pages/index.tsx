@@ -25,7 +25,7 @@ interface IResultsState {
   list: ISearchResult[];
 }
 
-const isExample: { value: boolean; target: SEARCH_RESULTS | boolean } = {
+const isExample: { value: false; target: SEARCH_RESULTS | boolean } = {
   value: false,
   target: SEARCH_RESULTS.One,
 };

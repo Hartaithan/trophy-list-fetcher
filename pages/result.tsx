@@ -12,7 +12,7 @@ import { ChangeEventHandler, useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const isExample: { value: boolean; target: EXAMPLE_TARGET | boolean } = {
+const isExample: { value: false; target: EXAMPLE_TARGET | boolean } = {
   value: false,
   target: EXAMPLE_TARGET.Base,
 };
@@ -113,11 +113,34 @@ const ResultPage: NextPage<
   };
 
   const copyThumbnail = () => {
-    if (navigator && props.result.thumbnail) {
+    if (navigator && navigator.clipboard && props.result.thumbnail) {
       navigator.clipboard.writeText(props.result.thumbnail);
     } else {
       console.error("there is nothing to copy :(");
     }
+  };
+
+  const selectTable = () => {
+    const table = document.getElementById("table");
+    let range: Range | null = null;
+    let selection: Selection | null = null;
+    const readyForSelection = !!document.createRange && !!window.getSelection;
+    if (!readyForSelection) {
+      return;
+    }
+    range = document.createRange();
+    selection = window.getSelection();
+    if (selection && table) {
+      selection.removeAllRanges();
+      try {
+        range.selectNodeContents(table);
+        selection.addRange(range);
+      } catch (e) {
+        range.selectNode(table);
+        selection.addRange(range);
+      }
+    }
+    document.execCommand("Copy");
   };
 
   if (!props.result.lists) {
@@ -181,6 +204,10 @@ const ResultPage: NextPage<
               Toggle Completion
             </label>
           </div>
+          <button className={styles.copyTable} onClick={selectTable}>
+            <p>Copy Table</p>
+            <Copy width={12} height={12} color="#FFF" />
+          </button>
         </div>
         <div className={styles.rowPicker}>
           <select
@@ -212,7 +239,7 @@ const ResultPage: NextPage<
             ))}
           </div>
         </div>
-        <table className={styles.table}>
+        <table id="table" className={styles.table}>
           <tbody>
             {props.result.lists.map((list) =>
               list.trophies.map((trophy, index) => {
