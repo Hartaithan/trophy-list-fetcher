@@ -116,7 +116,7 @@ const ResultPage: NextPage<
     if (navigator && navigator.clipboard && props.result.thumbnail) {
       navigator.clipboard.writeText(props.result.thumbnail);
     } else {
-      console.error("there is nothing to copy :(");
+      alert("there is nothing to copy :(");
     }
   };
 
@@ -139,6 +139,8 @@ const ResultPage: NextPage<
         range.selectNode(table);
         selection.addRange(range);
       }
+    } else {
+      alert("there is nothing to copy :(");
     }
     document.execCommand("Copy");
   };
