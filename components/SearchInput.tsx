@@ -33,6 +33,7 @@ const SearchInput: FC<IInputProps> = (props) => {
     ...rest
   } = props;
   const [isShow, setShow] = useState(false);
+  const isEmpty = suggestions.length === 0;
 
   const handleFocus: FocusEventHandler<HTMLInputElement> = (e) => {
     if (onFocus) {
@@ -77,7 +78,9 @@ const SearchInput: FC<IInputProps> = (props) => {
       />
       {isShow && (
         <div
-          className={`${styles.suggestions} ${isLoading ? styles.loader : ""}`}
+          className={`${styles.suggestions} ${
+            isLoading || isEmpty ? styles.loader : ""
+          }`}
         >
           {isLoading ? (
             <Loader width={80} height={80} />
@@ -92,6 +95,9 @@ const SearchInput: FC<IInputProps> = (props) => {
                 <p className={styles.platform}>{suggest.platforms.join(",")}</p>
               </div>
             ))
+          )}
+          {!isLoading && suggestions.length === 0 && (
+            <p className={styles.name}>No results :(</p>
           )}
         </div>
       )}
