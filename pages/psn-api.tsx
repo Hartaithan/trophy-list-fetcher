@@ -1,11 +1,9 @@
 import Input from "@/components/Input";
 import { NextPage } from "next";
-import {
-  exchangeNpssoForCode,
-  exchangeCodeForAccessToken,
-  AuthTokensResponse,
-} from "psn-api";
 import { useState } from "react";
+import { AuthTokensResponse } from "psn-api";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 const PSNPage: NextPage = () => {
   const [auth, setAuth] = useState<AuthTokensResponse>(
@@ -13,18 +11,33 @@ const PSNPage: NextPage = () => {
   );
   const [npsso, setNpsso] = useState("");
 
-  const handleSubmit = async () => {
-    console.info("npsso", npsso);
-    const accessCode = await exchangeNpssoForCode(npsso);
-    console.info("accessCode", accessCode);
-    const authorization = await exchangeCodeForAccessToken(accessCode);
-    console.info("authorization", authorization);
-    setAuth(authorization);
+  const handleSubmit = () => {
+    fetch(`${API_URL}/token?npsso=${npsso}`)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.authorization) {
+          setAuth(res.authorization);
+        } else {
+          console.error("token not found");
+        }
+      })
+      .catch((error) => {
+        console.error("token retrieve error", error);
+      });
   };
 
   return (
     <>
-      <p style={{ marginBottom: 10 }}>Authorization: {JSON.stringify(auth)}</p>
+      <pre
+        style={{
+          padding: "0px 100px",
+          whiteSpace: "pre-wrap",
+          wordBreak: "break-all",
+          marginBottom: 10,
+        }}
+      >
+        Authorization: {JSON.stringify(auth, null, 2)}
+      </pre>
       <Input
         value={npsso}
         placeholder="Enter your NPSSO token"
