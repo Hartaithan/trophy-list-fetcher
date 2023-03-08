@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import styles from "@/styles/SearchInput.module.css";
+import inputStyles from "@/styles/Input.module.css";
 import { ISearchResult } from "@/models/SearchModel";
 import { isLink } from "@/helpers/link";
 import Loader from "./Loader";
@@ -24,6 +25,7 @@ interface IInputProps extends HTMLInputProps {
 
 const SearchInput: FC<IInputProps> = (props) => {
   const {
+    className,
     isLoading,
     suggestions,
     onSuggestClick,
@@ -69,8 +71,9 @@ const SearchInput: FC<IInputProps> = (props) => {
   };
 
   return (
-    <div className={`${props.className} ${styles.wrapper}`}>
+    <div className={`${className} ${inputStyles.input} ${styles.wrapper}`}>
       <input
+        className={`${className} ${inputStyles.input}`}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleChange}

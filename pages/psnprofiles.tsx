@@ -12,6 +12,9 @@ import SearchInput from "@/components/SearchInput";
 import { ISearchResult } from "@/models/SearchModel";
 import { SEARCH_RESULTS } from "@/models/ExampleModel";
 import { isLink } from "@/helpers/link";
+import Input from "@/components/Input";
+import Select from "@/components/Select";
+import { ISelectOption } from "@/models/SelectModel";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -29,6 +32,11 @@ const isExample: { value: false; target: SEARCH_RESULTS | boolean } = {
   value: false,
   target: SEARCH_RESULTS.One,
 };
+
+const langOptions: ISelectOption[] = [
+  { id: 1, value: "ru", label: "Russian" },
+  { id: 2, value: "en", label: "English" },
+];
 
 const PSNProfilesPage: NextPage = () => {
   const router = useRouter();
@@ -105,11 +113,12 @@ const PSNProfilesPage: NextPage = () => {
         onSuggestClick={handleSuggestion}
         autoComplete="off"
       />
-      <select className={styles.input} defaultValue="ru" name="lang">
-        <option value="ru">Russian</option>
-        <option value="en">English</option>
-      </select>
-      <input className={styles.input} value="Submit" type="submit" />
+      <Select
+        defaultValue={langOptions[0].value}
+        name="lang"
+        options={langOptions}
+      />
+      <Input className={styles.input} value="Submit" type="submit" />
     </form>
   );
 };
