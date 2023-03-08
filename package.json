@@ -16,6 +16,7 @@
     "cheerio": "^1.0.0-rc.12",
     "eslint-config-next": "13.1.2",
     "next": "13.1.2",
+    "psn-api": "^2.8.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "4.9.4"
