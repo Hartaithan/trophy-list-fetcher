@@ -49,7 +49,7 @@ const getContent = async (query: string, example: SEARCH_RESULTS) => {
   return content;
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const searchByQuery = async (req: NextApiRequest, res: NextApiResponse) => {
   const { query, example } = req.query as ISearchQueries;
 
   if (!API_URL || !SCRAPE_URL || !API_KEY || !HOST) {
@@ -83,6 +83,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   return res.status(200).json({ query, resultQuery, results });
+};
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { method } = req;
+  switch (method) {
+    case "GET":
+      return searchByQuery(req, res);
+    default:
+      res.setHeader("Allow", ["GET"]);
+      return res.status(405).end(`Method ${method} Not Allowed`);
+  }
 };
 
 export default handler;

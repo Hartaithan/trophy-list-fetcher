@@ -57,7 +57,7 @@ const getContent = async (
   return content;
 };
 
-const getTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
+const parseTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
   const trophies: Object[] = [];
   rows.each((_, row) => {
     const content = cheerio(row).find(select.trophyContent).first();
@@ -71,7 +71,7 @@ const getTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
   return trophies;
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const getTrophyList = async (req: NextApiRequest, res: NextApiResponse) => {
   const { url, lang = "ru", example } = req.query as IFetchQueries;
 
   if (!API_URL || !SCRAPE_URL || !API_KEY || !HOST) {
@@ -117,12 +117,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       : "Base Game";
     const table = haveDLC ? nameRow.next() : listsEl.first().find(select.table);
     const rows = table.find(select.tableRows);
-    const trophies = getTrophyList(cheerio, rows);
+    const trophies = parseTrophyList(cheerio, rows);
     const count = trophies.length;
     lists.push({ name, count, trophies });
   });
 
   return res.status(200).json({ title, platform, thumbnail, cover, lists });
+};
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { method } = req;
+  switch (method) {
+    case "GET":
+      return getTrophyList(req, res);
+    default:
+      res.setHeader("Allow", ["GET"]);
+      return res.status(405).end(`Method ${method} Not Allowed`);
+  }
 };
 
 export default handler;

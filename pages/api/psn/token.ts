@@ -10,7 +10,10 @@ interface ITokenQueries {
   npsso: string;
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const exchangeNpssoForAccessToken = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
   const { npsso } = req.query as ITokenQueries;
 
   let accessCode: string | null = null;
@@ -31,6 +34,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   return res.status(200).json({ authorization });
+};
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { method } = req;
+  switch (method) {
+    case "GET":
+      return exchangeNpssoForAccessToken(req, res);
+    default:
+      res.setHeader("Allow", ["GET"]);
+      return res.status(405).end(`Method ${method} Not Allowed`);
+  }
 };
 
 export default handler;

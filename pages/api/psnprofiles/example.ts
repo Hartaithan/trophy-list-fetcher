@@ -23,7 +23,7 @@ const pickSearchExample = (query: SEARCH_RESULTS) => {
   return `/${query}.json`;
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const getExample = async (req: NextApiRequest, res: NextApiResponse) => {
   const { query, search } = req.query as IExampleQueries;
   let filename = "";
   if (query && !search) {
@@ -40,6 +40,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const jsonDirectory = path.join(process.cwd(), "json");
   const fileContents = await fs.readFile(jsonDirectory + filename, "utf8");
   return res.status(200).json(fileContents);
+};
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { method } = req;
+  switch (method) {
+    case "GET":
+      return getExample(req, res);
+    default:
+      res.setHeader("Allow", ["GET"]);
+      return res.status(405).end(`Method ${method} Not Allowed`);
+  }
 };
 
 export default handler;
