@@ -1,24 +1,60 @@
-.form {
-  display: flex;
-  flex-direction: column;
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
 }
 
-.input {
-  width: 300px;
-  min-height: 30px;
-  border-radius: 6px;
-  padding: 5px 10px;
-  background: #121212;
+.links {
+  display: flex;
+  gap: 12px;
+}
+
+.link {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 10px;
   color: #ffffff;
   border: none;
   outline: none;
-  margin-bottom: 10px;
+  text-decoration: none;
+  text-align: center;
 }
 
-.input:last-child {
-  margin-bottom: 0;
+.link:hover .overlay,
+.link:hover .linkLabel {
+  opacity: 1;
 }
 
-.input[type="submit"] {
-  cursor: pointer;
+.linkLabel {
+  z-index: 3;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-weight: 700;
+}
+
+.link > img {
+  position: absolute;
+  z-index: 1;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #000000cc;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
