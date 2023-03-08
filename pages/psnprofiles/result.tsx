@@ -69,9 +69,9 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
     if (isExample.value) {
       example = `&example=${isExample.target}`;
     }
-    const result = await fetch(`${API_URL}/fetch?url=${url}${example}`).then(
-      (res) => res.json()
-    );
+    const result = await fetch(
+      `${API_URL}/psnprofiles/fetch?url=${url}${example}`
+    ).then((res) => res.json());
     return {
       props: { result },
     };

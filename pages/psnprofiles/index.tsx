@@ -55,7 +55,7 @@ const PSNProfilesPage: NextPage = () => {
       }
       const valueIsLink = isLink(value);
       if (value.length > 0 && !valueIsLink) {
-        fetch(`${API_URL}/search?query=${value}${example}`)
+        fetch(`${API_URL}/psnprofiles/search?query=${value}${example}`)
           .then((res) => res.json())
           .then((result) => {
             setResults((prev) => ({
@@ -92,7 +92,7 @@ const PSNProfilesPage: NextPage = () => {
       return;
     }
     router.push({
-      pathname: "/result",
+      pathname: "/psnprofiles/result",
       query: {
         url: formUrl,
         lang: formLang,

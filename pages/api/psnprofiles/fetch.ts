@@ -34,7 +34,7 @@ const getContent = async (
 ): Promise<any> => {
   let content = null;
   if (example) {
-    let exampleUrl = "/example";
+    let exampleUrl = "/psnprofiles/example";
     if (!Object.values(EXAMPLE_TARGET).includes(example)) {
       exampleUrl += "?query=true";
     } else {

@@ -10,6 +10,7 @@ const Home: NextPage = () => (
       <Link className={styles.link} href="/psnprofiles">
         <div className={styles.overlay} />
         <Image
+          priority
           src="/psnprofiles.png"
           alt="psnprofiles.com logo"
           width={150}
@@ -17,9 +18,15 @@ const Home: NextPage = () => (
         />
         <p className={styles.linkLabel}>PSNProfiles.com</p>
       </Link>
-      <Link className={styles.link} href="/psn-api">
+      <Link className={styles.link} href="/psn">
         <div className={styles.overlay} />
-        <Image src="/psn-api.png" alt="psn api logo" width={150} height={150} />
+        <Image
+          priority
+          src="/psn.png"
+          alt="psn api logo"
+          width={150}
+          height={150}
+        />
         <p className={styles.linkLabel}>PSN API</p>
       </Link>
     </div>

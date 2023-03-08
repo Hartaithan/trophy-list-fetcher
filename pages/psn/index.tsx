@@ -12,7 +12,7 @@ const PSNPage: NextPage = () => {
   const [npsso, setNpsso] = useState("");
 
   const handleSubmit = () => {
-    fetch(`${API_URL}/token?npsso=${npsso}`)
+    fetch(`${API_URL}/psn/token?npsso=${npsso}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.authorization) {
