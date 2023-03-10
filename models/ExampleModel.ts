@@ -1,4 +1,6 @@
-export enum EXAMPLE_TARGET {
+export type EXAMPLE_TARGET = "trophy-list" | "search";
+
+export enum TROPHY_LISTS {
   PS4 = "ps4",
   PS5 = "ps5",
   Base = "base",

@@ -34,12 +34,7 @@ const getContent = async (
 ): Promise<any> => {
   let content = null;
   if (example) {
-    let exampleUrl = "/psnprofiles/example";
-    if (!Object.values(EXAMPLE_TARGET).includes(example)) {
-      exampleUrl += "?query=true";
-    } else {
-      exampleUrl += `?query=${example}`;
-    }
+    const exampleUrl = `/psnprofiles/example?target=trophy-list&query=${example}`;
     const data = await fetch(API_URL + exampleUrl).then((res) => res.json());
     content = JSON.parse(data);
   } else {

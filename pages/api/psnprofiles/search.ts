@@ -26,12 +26,7 @@ interface ISearchQueries {
 const getContent = async (query: string, example: SEARCH_RESULTS) => {
   let content = null;
   if (example) {
-    let exampleUrl = "/psnprofiles/example";
-    if (!Object.values(SEARCH_RESULTS).includes(example)) {
-      exampleUrl += "?search=true";
-    } else {
-      exampleUrl += `?search=${example}`;
-    }
+    const exampleUrl = `/psnprofiles/example?target=search&query=${example}`;
     const data = await fetch(API_URL + exampleUrl).then((res) => res.json());
     content = JSON.parse(data);
   } else {

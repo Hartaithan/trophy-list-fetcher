@@ -1,6 +1,6 @@
 import Copy from "@/icons/Copy";
 import Delete from "@/icons/Delete";
-import { EXAMPLE_TARGET } from "@/models/ExampleModel";
+import { TROPHY_LISTS } from "@/models/ExampleModel";
 import { IResult, IRow } from "@/models/ResultModel";
 import styles from "@/styles/Result.module.css";
 import {
@@ -13,9 +13,9 @@ import { ChangeEventHandler, useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const isExample: { value: false; target: EXAMPLE_TARGET | boolean } = {
+const isExample: { value: false; target: TROPHY_LISTS | boolean } = {
   value: false,
-  target: EXAMPLE_TARGET.Base,
+  target: TROPHY_LISTS.Base,
 };
 
 interface IResultPageProps {

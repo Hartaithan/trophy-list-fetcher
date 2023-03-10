@@ -1,40 +1,53 @@
 import path from "path";
 import { promises as fs } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
-import { EXAMPLE_TARGET, SEARCH_RESULTS } from "@/models/ExampleModel";
+import {
+  TROPHY_LISTS,
+  SEARCH_RESULTS,
+  EXAMPLE_TARGET,
+} from "@/models/ExampleModel";
 
 interface IExampleQueries {
   [key: string]: string | string[];
-  query: EXAMPLE_TARGET;
-  search: SEARCH_RESULTS;
+  target: EXAMPLE_TARGET;
+  query: TROPHY_LISTS | SEARCH_RESULTS;
 }
 
-const pickTrophiesExample = (query: EXAMPLE_TARGET) => {
-  if (!Object.values(EXAMPLE_TARGET).includes(query)) {
-    return "/base.json";
+const pickExample = (
+  target: EXAMPLE_TARGET,
+  query: TROPHY_LISTS | SEARCH_RESULTS
+): string | null => {
+  switch (target) {
+    case "trophy-list":
+      if (!Object.values(TROPHY_LISTS).includes(query as TROPHY_LISTS)) {
+        return null;
+      }
+      return `/${query}.json`;
+    case "search":
+      if (!Object.values(SEARCH_RESULTS).includes(query as SEARCH_RESULTS)) {
+        return null;
+      }
+      return `/${query}.json`;
+    default:
+      return null;
   }
-  return `/${query}.json`;
-};
-
-const pickSearchExample = (query: SEARCH_RESULTS) => {
-  if (!Object.values(SEARCH_RESULTS).includes(query)) {
-    return "/search-one.json";
-  }
-  return `/${query}.json`;
 };
 
 const getExample = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { query, search } = req.query as IExampleQueries;
-  let filename = "";
-  if (query && !search) {
-    filename = pickTrophiesExample(query);
+  const { target, query } = req.query as IExampleQueries;
+  if (!target) {
+    return res.status(400).json({ message: "Target is required" });
   }
-  if (!query && search) {
-    filename = pickSearchExample(search);
+  if (!query) {
+    return res.status(400).json({ message: "Query is required" });
   }
-  if (query && search) {
+  if (query && query.trim().length === 0) {
+    return res.status(400).json({ message: "Query cannot be empty" });
+  }
+  const filename = pickExample(target, query);
+  if (!filename) {
     return res.status(400).json({
-      message: "You cannot use two types of examples at the same time.",
+      message: `The requested ${target} example does not exist.`,
     });
   }
   const jsonDirectory = path.join(process.cwd(), "json");
