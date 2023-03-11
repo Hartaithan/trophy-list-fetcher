@@ -1,5 +1,4 @@
 import styles from "@/styles/PSNProfiles.module.css";
-import { NextPage } from "next";
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -15,6 +14,8 @@ import { isLink } from "@/helpers/link";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
 import { ISelectOption } from "@/models/SelectModel";
+import { IPage } from "@/models/AppModel";
+import PSNProfilesLayout from "@/layouts/PSNProfilesLayout";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -38,7 +39,7 @@ const langOptions: ISelectOption[] = [
   { id: 2, value: "en", label: "English" },
 ];
 
-const PSNProfilesPage: NextPage = () => {
+const PSNProfilesPage: IPage = () => {
   const router = useRouter();
   const [url, setUrl] = useState<string>("");
   const [results, setResults] = useState<IResultsState>({
@@ -122,5 +123,7 @@ const PSNProfilesPage: NextPage = () => {
     </form>
   );
 };
+
+PSNProfilesPage.Layout = PSNProfilesLayout;
 
 export default PSNProfilesPage;

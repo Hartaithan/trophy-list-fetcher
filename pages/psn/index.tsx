@@ -1,5 +1,8 @@
-import { NextPage } from "next";
+import PSNLayout from "@/layouts/PSNLayout";
+import { IPSNPage } from "@/models/AppModel";
 
-const PSNMainPage: NextPage = () => <p>PSNMainPage</p>;
+const PSNMainPage: IPSNPage = () => <p>PSNMainPage</p>;
+
+PSNMainPage.Layout = PSNLayout;
 
 export default PSNMainPage;

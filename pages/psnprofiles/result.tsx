@@ -1,13 +1,11 @@
 import Copy from "@/icons/Copy";
 import Delete from "@/icons/Delete";
+import PSNProfilesLayout from "@/layouts/PSNProfilesLayout";
+import { IPage } from "@/models/AppModel";
 import { TROPHY_LISTS } from "@/models/ExampleModel";
 import { IResult, IRow } from "@/models/ResultModel";
 import styles from "@/styles/Result.module.css";
-import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import { ChangeEventHandler, useState } from "react";
 
@@ -18,7 +16,7 @@ const isExample: { value: false; target: TROPHY_LISTS | boolean } = {
   target: TROPHY_LISTS.Base,
 };
 
-interface IResultPageProps {
+interface IPSNProfilesResultPageProps {
   result: IResult;
 }
 
@@ -55,9 +53,9 @@ const options: IRow[] = [
   },
 ];
 
-export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
-  ctx
-) => {
+export const getServerSideProps: GetServerSideProps<
+  IPSNProfilesResultPageProps
+> = async (ctx) => {
   const { url } = ctx.query;
   if (!url) {
     return {
@@ -82,7 +80,7 @@ export const getServerSideProps: GetServerSideProps<IResultPageProps> = async (
   }
 };
 
-const ResultPage: NextPage<
+const PSNProfilesResultPage: IPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
   const [complete, setComplete] = useState(false);
@@ -282,4 +280,6 @@ const ResultPage: NextPage<
   );
 };
 
-export default ResultPage;
+PSNProfilesResultPage.Layout = PSNProfilesLayout;
+
+export default PSNProfilesResultPage;

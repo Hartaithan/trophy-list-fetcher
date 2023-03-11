@@ -1,11 +1,13 @@
 import Input from "@/components/Input";
-import { NextPage } from "next";
+import { IPage } from "@/models/AppModel";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
-const PSNSignInPage: NextPage = () => {
+const PSNSignInPage: IPage = () => {
   const [npsso, setNpsso] = useState("");
+  const router = useRouter();
 
   const handleSubmit = () => {
     fetch(`${API_URL}/psn/signIn`, {
@@ -16,8 +18,8 @@ const PSNSignInPage: NextPage = () => {
       body: JSON.stringify({ npsso }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("data", data);
+      .then(() => {
+        router.push("/psn");
       })
       .catch((error) => {
         console.error("error", error);

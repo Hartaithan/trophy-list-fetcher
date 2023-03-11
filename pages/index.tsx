@@ -1,9 +1,9 @@
+import { IPage } from "@/models/AppModel";
 import styles from "@/styles/Home.module.css";
-import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-const Home: NextPage = () => (
+const Home: IPage = () => (
   <>
     <p className={styles.title}>Fetch trophy list from:</p>
     <div className={styles.links}>
