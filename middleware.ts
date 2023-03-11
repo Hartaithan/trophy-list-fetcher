@@ -1,5 +1,3 @@
-// UNUSED FILE
-
 import { NextRequest, NextResponse } from "next/server";
 import {
   getProfileFromUserName,
@@ -11,19 +9,18 @@ export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next();
 
   const access_token = req.cookies.get("access_token")?.value;
-  const refresh_token = req.cookies.get("access_token")?.value;
-  let profile: ProfileFromUserNameResponse | null = null;
+  let response: ProfileFromUserNameResponse | null = null;
 
-  if (access_token && refresh_token) {
+  if (access_token) {
     const authorization: AuthorizationPayload = { accessToken: access_token };
     try {
-      profile = await getProfileFromUserName(authorization, "me");
+      response = await getProfileFromUserName(authorization, "me");
     } catch (error) {
       console.error("unable to get profile", error);
     }
   }
 
-  const isAuth = profile && access_token && refresh_token;
+  const isAuth = response && access_token;
   const isSignIn = req.nextUrl.pathname.startsWith("/psn/signIn");
 
   if ((isAuth && !isSignIn) || (!isAuth && isSignIn)) {
