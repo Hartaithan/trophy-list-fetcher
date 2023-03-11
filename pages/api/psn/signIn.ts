@@ -1,3 +1,4 @@
+import { getErrorMessage } from "@/helpers/error";
 import { setCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
 import {
@@ -20,14 +21,16 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
     accessCode = await exchangeNpssoForCode(npsso);
   } catch (error) {
     console.error("exchange access code error", error);
-    return res.status(400).json({ message: "Unable to get access code" });
+    const { message } = getErrorMessage(error, "Unable to get access code");
+    return res.status(400).json({ message });
   }
 
   try {
     authorization = await exchangeCodeForAccessToken(accessCode);
   } catch (error) {
     console.error("exchange access token error", error);
-    return res.status(400).json({ message: "Unable to get access token" });
+    const { message } = getErrorMessage(error, "Unable to get access token");
+    return res.status(400).json({ message });
   }
 
   const options = { req, res };

@@ -1,3 +1,4 @@
+import { getErrorMessage } from "@/helpers/error";
 import { deleteCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -9,7 +10,8 @@ const signOut = async (req: NextApiRequest, res: NextApiResponse) => {
     deleteCookie("refresh_token", options);
     return res.status(200).json({ message: "Successful sign out!" });
   } catch (error) {
-    return res.status(400).json({ message: "Unable to sign out." });
+    const { message } = getErrorMessage(error, "Unable to sign out");
+    return res.status(400).json({ message });
   }
 };
 

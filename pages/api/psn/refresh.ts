@@ -1,3 +1,4 @@
+import { getErrorMessage } from "@/helpers/error";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCookie, setCookie } from "cookies-next";
 import { AuthTokensResponse, exchangeRefreshTokenForAuthTokens } from "psn-api";
@@ -14,7 +15,8 @@ const refreshAccessToken = async (
     authorization = await exchangeRefreshTokenForAuthTokens(refresh_token);
   } catch (error) {
     console.error("refresh access token error", error);
-    return res.status(400).json({ message: "Unable to refresh token" });
+    const { message } = getErrorMessage(error, "Unable to refresh token");
+    return res.status(400).json({ message });
   }
 
   const { accessToken, expiresIn, refreshToken, refreshTokenExpiresIn } =
