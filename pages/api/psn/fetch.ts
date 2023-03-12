@@ -126,35 +126,27 @@ const getTrophyList = async (req: NextApiRequest, res: NextApiResponse) => {
     listOptions = { npServiceName: "trophy" };
   }
 
-  const trophyGroups: ITitleGroups = await getTitleTrophyGroups(
-    authorization,
-    code,
-    listOptions
-  );
-  if (trophyGroups.error) {
+  const [groups, trophies]: [ITitleGroups, ITitleTrophies] = await Promise.all([
+    getTitleTrophyGroups(authorization, code, listOptions),
+    getTitleTrophies(authorization, code, "all", listOptions),
+  ]);
+  if (groups.error) {
     return res.status(400).json({
-      message: trophyGroups.error.message || "Unable to get trophy groups",
+      message: groups.error.message || "Unable to get trophy groups",
+    });
+  }
+  if (trophies.error) {
+    return res.status(400).json({
+      message: trophies.error.message || "Unable to get trophy lists",
     });
   }
 
-  const trophyList: ITitleTrophies = await getTitleTrophies(
-    authorization,
-    code,
-    "all",
-    listOptions
-  );
-  if (trophyList.error) {
-    return res.status(400).json({
-      message: trophyList.error.message || "Unable to get trophy lists",
-    });
-  }
-
-  const lists: ITrophyList[] = formatTrophyLists(trophyGroups, trophyList);
+  const lists: ITrophyList[] = formatTrophyLists(groups, trophies);
 
   const response: IResponse = {
-    title: trophyGroups.trophyTitleName,
-    platform: trophyGroups.trophyTitlePlatform,
-    thumbnail: trophyGroups.trophyTitleIconUrl,
+    title: groups.trophyTitleName,
+    platform: groups.trophyTitlePlatform,
+    thumbnail: groups.trophyTitleIconUrl,
     lists,
   };
   return res.status(200).json(response);
