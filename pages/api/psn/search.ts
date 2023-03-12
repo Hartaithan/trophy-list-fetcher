@@ -12,6 +12,9 @@ const allowedPlatforms: string[] = ["PS5", "PS4", "PS3", "Vita"];
 
 const searchByQuery = async (req: NextApiRequest, res: NextApiResponse) => {
   const { query } = req.query as ISearchQueries;
+  if (!query) {
+    return res.status(400).json({ message: "Query is required" });
+  }
   let results = null;
   try {
     results = await fetch(`${SEARCH_URL}/site_search_add?query=${query}`).then(
