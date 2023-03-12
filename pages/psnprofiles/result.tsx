@@ -5,9 +5,9 @@ import { IPage } from "@/models/AppModel";
 import { TROPHY_LISTS } from "@/models/ExampleModel";
 import {
   IPSNProfilesFetchResponse as IResponse,
-  IPSNProfilesTableRow as IRow,
+  IRow,
 } from "@/models/TrophyModel";
-import styles from "@/styles/Result.module.css";
+import styles from "@/styles/PSNProfilesResult.module.css";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import { ChangeEventHandler, useState } from "react";

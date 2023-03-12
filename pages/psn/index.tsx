@@ -73,7 +73,7 @@ const PSNMainPage: IPSNPage = () => {
       return;
     }
     router.push({
-      pathname: "/psnprofiles/result",
+      pathname: "/psn/result",
       query: {
         url: formUrl,
       },

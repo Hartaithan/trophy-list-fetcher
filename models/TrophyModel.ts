@@ -19,12 +19,6 @@ export interface IPSNProfilesFetchResponse {
   message?: string;
 }
 
-export interface IPSNProfilesTableRow {
-  id: number;
-  value: string;
-  label: string;
-}
-
 export interface IPSNTrophy {
   name: string;
   description: string;
@@ -43,4 +37,10 @@ export interface IPSNFetchResponse {
   thumbnail: string;
   lists: IPSNTrophyList[];
   message?: string;
+}
+
+export interface IRow {
+  id: number;
+  value: string;
+  label: string;
 }
