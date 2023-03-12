@@ -50,14 +50,18 @@ const options: IRow[] = [
 export const getServerSideProps: GetServerSideProps<
   IPSNResultPageProps
 > = async (ctx) => {
-  const { url } = ctx.query;
+  const { url, lang } = ctx.query;
   if (!url) {
     return {
       props: { result: { message: "URL not found!" } },
     };
   }
+  let params = `?url=${url}`;
+  if (lang) {
+    params += `&lang=${lang}`;
+  }
   try {
-    const result = await fetch(`${API_URL}/psn/fetch?url=${url}`, {
+    const result = await fetch(`${API_URL}/psn/fetch${params}`, {
       method: "GET",
       credentials: "include",
       headers: {

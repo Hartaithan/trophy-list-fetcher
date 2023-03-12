@@ -19,14 +19,14 @@ import PSNProfilesLayout from "@/layouts/PSNProfilesLayout";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-interface FormTarget extends EventTarget {
-  url: { value: string };
-  lang: { value: string };
-}
-
 interface IResultsState {
   isLoading: boolean;
   list: ISearchResult[];
+}
+
+interface FormTarget extends EventTarget {
+  url: { value: string };
+  lang: { value: string };
 }
 
 const isExample: { value: false; target: SEARCH_RESULTS | boolean } = {
@@ -35,8 +35,8 @@ const isExample: { value: false; target: SEARCH_RESULTS | boolean } = {
 };
 
 const langOptions: ISelectOption[] = [
-  { id: 1, value: "ru", label: "Russian" },
-  { id: 2, value: "en", label: "English" },
+  { id: 1, value: "en", label: "English" },
+  { id: 2, value: "ru", label: "Russian" },
 ];
 
 const PSNProfilesPage: IPage = () => {

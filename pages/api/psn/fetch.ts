@@ -25,6 +25,7 @@ type TitleTrophiesOptions = Pick<
 interface IFetchQueries {
   [key: string]: string | string[];
   url: string;
+  lang: string;
 }
 
 interface ITitleTrophies extends TitleTrophiesResponse {
@@ -100,7 +101,8 @@ const formatTrophyLists = (
 };
 
 const getTrophyList = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { url } = req.query as IFetchQueries;
+  const { url, lang = "en-en" } = req.query as IFetchQueries;
+
   const platform = getPlatformFromUrl(url);
 
   const content = await getContent(url);
@@ -120,11 +122,15 @@ const getTrophyList = async (req: NextApiRequest, res: NextApiResponse) => {
   const access_token = getCookie("access_token", options) as string;
   const authorization: AuthorizationPayload = { accessToken: access_token };
 
-  let listOptions: Partial<TitleTrophiesOptions> | undefined;
+  let listOptions: Partial<TitleTrophiesOptions> = {
+    headerOverrides: { "Accept-Language": lang },
+  };
 
   if (platform !== "ps5") {
-    listOptions = { npServiceName: "trophy" };
+    listOptions = { ...listOptions, npServiceName: "trophy" };
   }
+
+  console.log("listOptions", listOptions);
 
   const [groups, trophies]: [ITitleGroups, ITitleTrophies] = await Promise.all([
     getTitleTrophyGroups(authorization, code, listOptions),

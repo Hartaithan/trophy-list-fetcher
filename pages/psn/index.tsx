@@ -12,6 +12,8 @@ import {
   useState,
 } from "react";
 import { ISearchResult } from "@/models/SearchModel";
+import { ISelectOption } from "@/models/SelectModel";
+import Select from "@/components/Select";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
@@ -22,7 +24,13 @@ interface IResultsState {
 
 interface FormTarget extends EventTarget {
   url: { value: string };
+  lang: { value: string };
 }
+
+const langOptions: ISelectOption[] = [
+  { id: 1, value: "en-en", label: "English" },
+  { id: 2, value: "ru-ru", label: "Russian" },
+];
 
 const PSNMainPage: IPSNPage = () => {
   const router = useRouter();
@@ -68,6 +76,7 @@ const PSNMainPage: IPSNPage = () => {
     e.preventDefault();
     const form = e.target as FormTarget;
     const formUrl = form.url.value.trim();
+    const formLang = form.lang.value;
     if (formUrl.length === 0) {
       alert("URL field is empty!");
       return;
@@ -76,6 +85,7 @@ const PSNMainPage: IPSNPage = () => {
       pathname: "/psn/result",
       query: {
         url: formUrl,
+        lang: formLang,
       },
     });
   };
@@ -92,6 +102,11 @@ const PSNMainPage: IPSNPage = () => {
         isLoading={results.isLoading}
         onSuggestClick={handleSuggestion}
         autoComplete="off"
+      />
+      <Select
+        defaultValue={langOptions[0].value}
+        name="lang"
+        options={langOptions}
       />
       <Input className={styles.input} value="Submit" type="submit" />
     </form>

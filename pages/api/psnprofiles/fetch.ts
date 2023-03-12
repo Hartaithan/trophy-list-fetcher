@@ -76,7 +76,7 @@ const parseTrophyList = (
 };
 
 const getTrophyList = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { url, lang = "ru", example } = req.query as IFetchQueries;
+  const { url, lang = "en", example } = req.query as IFetchQueries;
 
   if (!API_URL || !SCRAPE_URL || !API_KEY || !HOST) {
     return res.status(400).json({ message: "Unable to get env variables" });

@@ -59,11 +59,15 @@ const options: IRow[] = [
 export const getServerSideProps: GetServerSideProps<
   IPSNProfilesResultPageProps
 > = async (ctx) => {
-  const { url } = ctx.query;
+  const { url, lang } = ctx.query;
   if (!url) {
     return {
       props: { result: { message: "URL not found!" } },
     };
+  }
+  let params = `?url=${url}`;
+  if (lang) {
+    params += `&lang=${lang}`;
   }
   try {
     let example = "";
@@ -71,7 +75,7 @@ export const getServerSideProps: GetServerSideProps<
       example = `&example=${isExample.target}`;
     }
     const result = await fetch(
-      `${API_URL}/psnprofiles/fetch?url=${url}${example}`
+      `${API_URL}/psnprofiles/fetch${params}${example}`
     ).then((res) => res.json());
     return {
       props: { result },
