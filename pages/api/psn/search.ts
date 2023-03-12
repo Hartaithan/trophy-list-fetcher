@@ -1,4 +1,7 @@
-import { IPSNSearchResponse, IPSNSearchResult } from "@/models/SearchModel";
+import {
+  IPSNSearchResponse as ISearchResponse,
+  ISearchResult,
+} from "@/models/SearchModel";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const SEARCH_URL = process.env.NEXT_PUBLIC_SEARCH_URL!;
@@ -37,8 +40,8 @@ const searchByQuery = async (req: NextApiRequest, res: NextApiResponse) => {
       id += 1;
     }
     return result;
-  }, [] as IPSNSearchResult[]);
-  const response: IPSNSearchResponse = { query, results: formattedGames };
+  }, [] as ISearchResult[]);
+  const response: ISearchResponse = { query, results: formattedGames };
   return res.status(200).json(response);
 };
 

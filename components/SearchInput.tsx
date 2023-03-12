@@ -95,7 +95,14 @@ const SearchInput: FC<IInputProps> = (props) => {
                 onMouseDown={() => onSuggestClick(suggest)}
               >
                 <p className={styles.name}>{suggest.name}</p>
-                <p className={styles.platform}>{suggest.platforms.join(",")}</p>
+                {suggest.platform && (
+                  <p className={styles.platform}>{suggest.platform}</p>
+                )}
+                {suggest.platforms && (
+                  <p className={styles.platform}>
+                    {suggest.platforms.join(",")}
+                  </p>
+                )}
               </div>
             ))
           )}

@@ -1,5 +1,8 @@
 import { SEARCH_RESULTS } from "@/models/ExampleModel";
-import { ISearchResponse, ISearchResult } from "@/models/SearchModel";
+import {
+  IPSNProfilesSearchResponse as ISearchResponse,
+  ISearchResult,
+} from "@/models/SearchModel";
 import { load } from "cheerio";
 import { NextApiRequest, NextApiResponse } from "next";
 
