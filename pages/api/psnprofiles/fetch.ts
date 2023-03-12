@@ -1,6 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Cheerio, CheerioAPI, load, Element } from "cheerio";
 import { EXAMPLE_TARGET } from "@/models/ExampleModel";
+import {
+  IPSNProfilesFetchResponse as IResponse,
+  IPSNProfilesTrophy as ITrophy,
+  IPSNProfilesTrophyList as ITrophyList,
+} from "@/models/TrophyModel";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const SCRAPE_URL = process.env.NEXT_PUBLIC_SCRAPE_URL!;
@@ -52,11 +57,15 @@ const getContent = async (
   return content;
 };
 
-const parseTrophyList = (cheerio: CheerioAPI, rows: Cheerio<Element>) => {
-  const trophies: Object[] = [];
+const parseTrophyList = (
+  cheerio: CheerioAPI,
+  rows: Cheerio<Element>
+): ITrophy[] => {
+  const trophies: ITrophy[] = [];
   rows.each((_, row) => {
     const content = cheerio(row).find(select.trophyContent).first();
-    const type = cheerio(row).find(select.trophyType).attr("title");
+    const type =
+      cheerio(row).find(select.trophyType).attr("title") || "Type not found";
     const name = content.find("a").text().trim();
     const description = content.contents().last().text().trim();
     if (name.length !== 0 && description.length !== 0) {
@@ -94,15 +103,16 @@ const getTrophyList = async (req: NextApiRequest, res: NextApiResponse) => {
   const platforms = cheerio(select.platform);
   const platform = platforms.first().text().toUpperCase();
 
-  const thumbnail = cheerio(select.thumbnail).find("img").attr("src");
+  const thumbnail =
+    cheerio(select.thumbnail).find("img").attr("src") || "Thumbnail not found";
 
-  let cover = cheerio(select.cover).attr("style") || null;
+  let cover = cheerio(select.cover).attr("style") || "Cover not found";
   if (cover !== null) {
     cover = cover.replace(/.*\(|\).*/g, "");
   }
 
   const listsEl = cheerio(select.list);
-  const lists: Object[] = [];
+  const lists: ITrophyList[] = [];
 
   listsEl.each((_, list) => {
     const haveDLC = listsEl.length > 1;
@@ -117,7 +127,15 @@ const getTrophyList = async (req: NextApiRequest, res: NextApiResponse) => {
     lists.push({ name, count, trophies });
   });
 
-  return res.status(200).json({ title, platform, thumbnail, cover, lists });
+  const response: IResponse = {
+    title,
+    platform,
+    thumbnail,
+    cover,
+    lists,
+  };
+
+  return res.status(200).json(response);
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

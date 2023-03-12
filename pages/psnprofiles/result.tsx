@@ -3,7 +3,10 @@ import Delete from "@/icons/Delete";
 import PSNProfilesLayout from "@/layouts/PSNProfilesLayout";
 import { IPage } from "@/models/AppModel";
 import { TROPHY_LISTS } from "@/models/ExampleModel";
-import { IResult, IRow } from "@/models/ResultModel";
+import {
+  IPSNProfilesFetchResponse as IResponse,
+  IPSNProfilesTableRow as IRow,
+} from "@/models/TrophyModel";
 import styles from "@/styles/Result.module.css";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
@@ -17,7 +20,7 @@ const isExample: { value: false; target: TROPHY_LISTS | boolean } = {
 };
 
 interface IPSNProfilesResultPageProps {
-  result: IResult;
+  result: IResponse;
 }
 
 const options: IRow[] = [
@@ -83,6 +86,7 @@ export const getServerSideProps: GetServerSideProps<
 const PSNProfilesResultPage: IPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
+  const { result } = props;
   const [complete, setComplete] = useState(false);
   const [rows, setRows] = useState<IRow[]>([...options]);
 
@@ -112,8 +116,8 @@ const PSNProfilesResultPage: IPage<
   };
 
   const copyThumbnail = () => {
-    if (navigator && navigator.clipboard && props.result.thumbnail) {
-      navigator.clipboard.writeText(props.result.thumbnail);
+    if (navigator && navigator.clipboard && result.thumbnail) {
+      navigator.clipboard.writeText(result.thumbnail);
     } else {
       alert("there is nothing to copy :(");
     }
@@ -144,11 +148,11 @@ const PSNProfilesResultPage: IPage<
     document.execCommand("Copy");
   };
 
-  if (!props.result.lists) {
+  if (!result.lists) {
     return (
       <>
         <p>On no! Something has gone wrong!</p>
-        <p>{props.result.message || "Error message not found"}</p>
+        <p>{result.message || "Error message not found"}</p>
       </>
     );
   }
@@ -162,8 +166,8 @@ const PSNProfilesResultPage: IPage<
           placeholder="blur"
           className={styles.cover}
           blurDataURL="/placeholder.jpg"
-          alt={`${props.result.title} cover`}
-          src={props.result.cover || "/placeholder.png"}
+          alt={`${result.title} cover`}
+          src={result.cover || "/placeholder.png"}
         />
       </div>
       <div className={styles.content}>
@@ -184,14 +188,14 @@ const PSNProfilesResultPage: IPage<
             placeholder="blur"
             blurDataURL="/placeholder.jpg"
             className={styles.thumbnail}
-            src={props.result.thumbnail || "/placeholder.png"}
-            alt={`${props.result.title} thumbnail`}
+            src={result.thumbnail || "/placeholder.png"}
+            alt={`${result.title} thumbnail`}
           />
         </div>
         <div className={styles.info}>
-          <h3 className={styles.title}>{props.result.title}</h3>
+          <h3 className={styles.title}>{result.title}</h3>
           <div className={styles.platformContainer}>
-            <p className={styles.platform}>{props.result.platform}</p>
+            <p className={styles.platform}>{result.platform}</p>
           </div>
           <div className={styles.completeContainer}>
             <input
@@ -244,7 +248,7 @@ const PSNProfilesResultPage: IPage<
         </div>
         <table id="table" className={styles.table}>
           <tbody>
-            {props.result.lists.map((list) =>
+            {result.lists.map((list) =>
               list.trophies.map((trophy, index) => {
                 if (trophy.type === "Platinum") {
                   return null;
