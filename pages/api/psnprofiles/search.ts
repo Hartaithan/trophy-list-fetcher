@@ -1,5 +1,5 @@
 import { SEARCH_RESULTS } from "@/models/ExampleModel";
-import { ISearchResult } from "@/models/SearchModel";
+import { ISearchResponse, ISearchResult } from "@/models/SearchModel";
 import { load } from "cheerio";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -77,7 +77,8 @@ const searchByQuery = async (req: NextApiRequest, res: NextApiResponse) => {
     results.push({ id: index + 1, name, url, platforms });
   });
 
-  return res.status(200).json({ query, resultQuery, results });
+  const response: ISearchResponse = { query, resultQuery, results };
+  return res.status(200).json(response);
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
