@@ -24,3 +24,23 @@ export interface IPSNProfilesTableRow {
   value: string;
   label: string;
 }
+
+export interface IPSNTrophy {
+  name: string;
+  description: string;
+  type: string;
+}
+
+export interface IPSNTrophyList {
+  name: string;
+  count: number;
+  trophies: IPSNProfilesTrophy[];
+}
+
+export interface IPSNFetchResponse {
+  title: string;
+  platform: string;
+  thumbnail: string;
+  lists: IPSNTrophyList[];
+  message?: string;
+}

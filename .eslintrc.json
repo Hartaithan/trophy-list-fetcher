@@ -23,6 +23,7 @@
     "import/prefer-default-export": "off",
     "import/no-named-default": "off",
     "@typescript-eslint/naming-convention": "off",
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "prefer-destructuring": ["error", { "object": true, "array": false }]
   }
 }
