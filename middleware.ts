@@ -11,7 +11,7 @@ type NullableProfileResponse = ProfileFromUserNameResponse | null;
 type NullableAuthResponse = AuthTokensResponse | null;
 
 export const config = {
-  matcher: "/psn/:path*",
+  matcher: ["/psn", "/psn/:path*"],
 };
 
 const getProfile = async (token: string): Promise<NullableProfileResponse> => {
