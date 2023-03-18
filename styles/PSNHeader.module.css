@@ -2,6 +2,12 @@
   height: 50px;
   width: 100%;
   display: flex;
-  justify-content: center;
+  padding-left: 12px;
+  padding-right: 12px;
+  justify-content: flex-end;
   align-items: center;
+}
+
+.button {
+  width: 80px;
 }
