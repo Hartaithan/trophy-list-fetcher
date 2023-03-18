@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import { FC } from "react";
-import { Inter } from "@next/font/google";
+import { Inter } from "next/font/google";
 import MainLayout from "@/layouts/MainLayout";
 import { IAppProps } from "@/models/AppModel";
 
