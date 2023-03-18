@@ -10,6 +10,10 @@ import {
 type NullableProfileResponse = ProfileFromUserNameResponse | null;
 type NullableAuthResponse = AuthTokensResponse | null;
 
+export const config = {
+  matcher: "/psn/:path*",
+};
+
 const getProfile = async (token: string): Promise<NullableProfileResponse> => {
   const authorization: AuthorizationPayload = { accessToken: token };
   let response: NullableProfileResponse = null;
@@ -42,7 +46,7 @@ const refreshTokens = async (
   return authorization;
 };
 
-export const middleware = async (req: NextRequest) => {
+export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
   let access_token = req.cookies.get("access_token")?.value;
@@ -78,8 +82,4 @@ export const middleware = async (req: NextRequest) => {
   }
 
   return NextResponse.redirect(redirectUrl);
-};
-
-export const config = {
-  matcher: "/psn/:path*",
-};
+}
