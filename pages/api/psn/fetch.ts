@@ -15,7 +15,7 @@ import {
 } from "psn-api";
 import { TrophyGroup } from "psn-api/dist/models/trophy-group.model";
 
-const SEARCH_URL = process.env.NEXT_PUBLIC_SEARCH_URL!;
+const SEARCH_URL = process.env.NEXT_PUBLIC_APP_SEARCH_URL!;
 
 type TitleTrophiesOptions = Pick<
   AllCallOptions,
@@ -36,15 +36,29 @@ interface ITitleGroups extends TitleTrophyGroupsResponse {
   error?: Error;
 }
 
+interface ISplittedUrl {
+  id: string | null;
+  platform: string | null;
+}
+
 const searchTag = "NPWR";
 
 const getContent = async (url: string): Promise<string | null> => {
+  let game: { id: string } | null = null;
   let content: string | null = null;
   try {
-    const fetchUrl = `${SEARCH_URL}${url}/trophies#args:ajax=1`;
-    content = await fetch(fetchUrl).then((r) => r.text());
+    const fetchUrl = `${SEARCH_URL}/trophies_list/games/${url}`;
+    game = await fetch(fetchUrl).then((r) => r.json());
   } catch (error) {
-    console.error("get content error", error);
+    console.error("get game content error", error);
+  }
+  if (!game) return content;
+  try {
+    const fetchUrl = `${SEARCH_URL}/trophies/trophies_list/${game.id}`;
+    const response = await fetch(fetchUrl).then((r) => r.json());
+    content = response.length > 0 ? response[0].image : null;
+  } catch (error) {
+    console.error("get game list error", error);
   }
   return content;
 };
@@ -52,11 +66,11 @@ const getContent = async (url: string): Promise<string | null> => {
 const getCode = (content: string): string =>
   content.substr(content.indexOf(searchTag), 8 + searchTag.length);
 
-const getPlatformFromUrl = (url: string): string | null => {
-  let platform: string | null = null;
+const splitUrl = (url: string): ISplittedUrl => {
+  let platform: ISplittedUrl = { id: null, platform: null };
   const splitted = url.split("/");
   if (splitted.length > 0) {
-    platform = splitted[1];
+    platform = { platform: splitted[0], id: splitted[1] };
   }
   return platform;
 };
@@ -103,9 +117,15 @@ const formatTrophyLists = (
 const getTrophyList = async (req: NextApiRequest, res: NextApiResponse) => {
   const { url, lang = "en-en" } = req.query as IFetchQueries;
 
-  const platform = getPlatformFromUrl(url);
+  const { id, platform } = splitUrl(url);
 
-  const content = await getContent(url);
+  if (!id || !platform) {
+    return res
+      .status(400)
+      .json({ message: "Unable to get id and platform from url" });
+  }
+
+  const content = await getContent(id);
 
   if (!content) {
     return res.status(400).json({ message: "Unable to get content" });

@@ -4,11 +4,17 @@ import {
 } from "@/models/SearchModel";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const SEARCH_URL = process.env.NEXT_PUBLIC_SEARCH_URL!;
+const SEARCH_URL = process.env.NEXT_PUBLIC_APP_SEARCH_URL!;
 
 interface ISearchQueries {
   [key: string]: string | string[];
   query: string;
+}
+
+interface ISearchRes {
+  id: string;
+  title: string;
+  platform_title: string;
 }
 
 const allowedPlatforms: string[] = ["PS5", "PS4", "PS3", "Vita"];
@@ -20,7 +26,7 @@ const searchByQuery = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   let results = null;
   try {
-    results = await fetch(`${SEARCH_URL}/site_search_add?query=${query}`).then(
+    results = await fetch(`${SEARCH_URL}/games/search?search=${query}`).then(
       (r) => r.json()
     );
   } catch (error) {
@@ -29,15 +35,18 @@ const searchByQuery = async (req: NextApiRequest, res: NextApiResponse) => {
       .status(400)
       .json({ message: `Unable to search by query: ${query}` });
   }
-  let id = 1;
-  const games: string[] = results?.games || [];
-  const urls: string[] = results?.urls_g || [];
-  const formattedGames = games.reduce((result, item, index) => {
-    const name = item.replace(/ *\([^)]*\) */g, "");
-    const platform = item.replace(/(^.*\(|\).*$)/g, "");
-    if (allowedPlatforms.includes(platform)) {
-      result.push({ id, name, platform, url: urls[index] });
-      id += 1;
+  const games: ISearchRes[] = results?.games || [];
+  let counted_id = 1;
+  const formattedGames = games.reduce((result, item) => {
+    const { id, title, platform_title } = item;
+    if (allowedPlatforms.includes(platform_title)) {
+      result.push({
+        id: counted_id,
+        name: title,
+        platform: platform_title,
+        url: `${platform_title.toLowerCase()}/${id}`,
+      });
+      counted_id += 1;
     }
     return result;
   }, [] as ISearchResult[]);
