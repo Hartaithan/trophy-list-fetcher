@@ -25,7 +25,7 @@ interface IInputProps extends HTMLInputProps {
 
 const SearchInput: FC<IInputProps> = (props) => {
   const {
-    className,
+    className = "",
     isLoading,
     suggestions,
     onSuggestClick,

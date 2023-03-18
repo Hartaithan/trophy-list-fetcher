@@ -15,7 +15,7 @@
   background: #121212;
   border-radius: 6px;
   width: 100%;
-  min-height: 100px;
+  min-height: 40px;
   max-height: 300px;
   overflow: auto;
 }
