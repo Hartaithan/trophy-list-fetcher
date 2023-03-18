@@ -46,7 +46,7 @@ const refreshTokens = async (
   return authorization;
 };
 
-export async function middleware(req: NextRequest) {
+export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next();
 
   let access_token = req.cookies.get("access_token")?.value;
@@ -61,8 +61,9 @@ export async function middleware(req: NextRequest) {
   if (!access_token && refresh_token) {
     const auth = await refreshTokens(res, refresh_token);
     if (auth) {
-      access_token = auth.accessToken;
-      refresh_token = auth.refreshToken;
+      const { accessToken, refreshToken } = auth;
+      access_token = accessToken;
+      refresh_token = refreshToken;
       response = await getProfile(access_token);
     }
   }
@@ -82,4 +83,4 @@ export async function middleware(req: NextRequest) {
   }
 
   return NextResponse.redirect(redirectUrl);
-}
+};

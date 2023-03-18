@@ -7,7 +7,7 @@ const Home: IPage = () => (
   <>
     <p className={styles.title}>Fetch trophy list from:</p>
     <div className={styles.links}>
-      <Link className={styles.link} href="/psnprofiles">
+      <Link className={styles.link} href="/psnprofiles" prefetch={false}>
         <div className={styles.overlay} />
         <Image
           priority
@@ -18,7 +18,7 @@ const Home: IPage = () => (
         />
         <p className={styles.linkLabel}>PSNProfiles.com</p>
       </Link>
-      <Link className={styles.link} href="/psn">
+      <Link className={styles.link} href="/psn" prefetch={false}>
         <div className={styles.overlay} />
         <Image
           priority
