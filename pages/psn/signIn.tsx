@@ -19,7 +19,7 @@ const PSNSignInPage: IPage = () => {
     })
       .then((response) => response.json())
       .then(() => {
-        router.push("/psn");
+        router.reload();
       })
       .catch((error) => {
         console.error("error", error);
