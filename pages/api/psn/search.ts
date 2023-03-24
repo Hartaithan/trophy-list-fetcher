@@ -15,6 +15,9 @@ interface ISearchRes {
   id: string;
   title: string;
   platform_title: string;
+  count_tlist: number;
+  count_article: number;
+  release_date: string;
 }
 
 const allowedPlatforms: string[] = ["PS5", "PS4", "PS3", "Vita"];
@@ -38,8 +41,8 @@ const searchByQuery = async (req: NextApiRequest, res: NextApiResponse) => {
   const games: ISearchRes[] = results?.games || [];
   let counted_id = 1;
   const formattedGames = games.reduce((result, item) => {
-    const { id, title, platform_title } = item;
-    if (allowedPlatforms.includes(platform_title)) {
+    const { id, title, platform_title, count_tlist } = item;
+    if (allowedPlatforms.includes(platform_title) && count_tlist > 0) {
       result.push({
         id: counted_id,
         name: title,
