@@ -46,16 +46,24 @@ const PSNMainPage: IPSNPage = () => {
       const valueIsLink = value.includes("/games/");
       if (value.length > 0 && !valueIsLink) {
         fetch(`${API_URL}/psn/search?query=${value}`)
-          .then((res) => res.json())
+          .then((res) => {
+            if (res.ok) return res.json();
+            throw new Error("search error");
+          })
           .then((result) => {
             setResults((prev) => ({
               ...prev,
-              isLoading: false,
               list: result.results,
             }));
           })
           .catch((error) => {
             console.error("search error", error);
+          })
+          .finally(() => {
+            setResults((prev) => ({
+              ...prev,
+              isLoading: false,
+            }));
           });
       }
     },
