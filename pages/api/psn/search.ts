@@ -1,3 +1,4 @@
+import { search as headers } from "@/helpers/headers";
 import {
   IPSNSearchResponse as ISearchResponse,
   ISearchResult,
@@ -29,9 +30,9 @@ const searchByQuery = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   let results = null;
   try {
-    results = await fetch(`${SEARCH_URL}/games/search?search=${query}`).then(
-      (r) => r.json()
-    );
+    results = await fetch(`${SEARCH_URL}/games/search?search=${query}`, {
+      headers,
+    }).then((r) => r.json());
   } catch (error) {
     console.error("search error", error);
     return res
