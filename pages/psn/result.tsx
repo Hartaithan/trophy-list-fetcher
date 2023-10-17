@@ -110,6 +110,14 @@ const PSNResultPage: IPage<
     setRows(filtered);
   };
 
+  const copyTitle = () => {
+    if (navigator && navigator.clipboard && result.title) {
+      navigator.clipboard.writeText(result.title);
+    } else {
+      alert("there is nothing to copy :(");
+    }
+  };
+
   const copyThumbnail = () => {
     if (navigator && navigator.clipboard && result.thumbnail) {
       navigator.clipboard.writeText(result.thumbnail);
@@ -191,6 +199,10 @@ const PSNResultPage: IPage<
             Toggle Completion
           </label>
         </div>
+        <button className={styles.copyTitle} onClick={copyTitle}>
+          <p>Copy Name</p>
+          <Copy width={12} height={12} />
+        </button>
         <button className={styles.copyTable} onClick={selectTable}>
           <p>Copy Table</p>
           <Copy width={12} height={12} />
