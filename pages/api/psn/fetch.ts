@@ -82,15 +82,16 @@ const formatTrophies = (
 ): ITrophy[] => {
   const trophies: ITrophy[] = [];
   for (let i = 0; i < list.trophies.length; i += 1) {
-    const { trophyName, trophyDetail, trophyGroupId, trophyType } =
+    const { trophyId, trophyName, trophyDetail, trophyGroupId, trophyType } =
       list.trophies[i];
+    const id = trophyId || -1;
     const name = trophyName || "Trophy name not found";
     const description = trophyDetail || "Trophy description not found";
     const type = trophyType.charAt(0).toUpperCase() + trophyType.slice(1);
     const sameGroup = trophyGroupId === group.trophyGroupId;
     const isPlatinum = trophyType === "platinum";
     if (sameGroup && !isPlatinum) {
-      trophies.push({ name, description, type });
+      trophies.push({ id, name, description, type });
     }
   }
   return trophies;

@@ -20,6 +20,7 @@ export interface IPSNProfilesFetchResponse {
 }
 
 export interface IPSNTrophy {
+  id: number;
   name: string;
   description: string;
   type: string;
