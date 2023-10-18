@@ -120,7 +120,7 @@
   justify-content: center;
   align-items: center;
   margin: 0;
-  margin-left: auto;
+  margin-left: 6px;
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 600;
@@ -130,6 +130,27 @@
 }
 
 .copyTable > p {
+  margin-right: 8px;
+}
+
+.copyTitle {
+  height: 28px;
+  border: none;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  margin-left: auto;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  background: #121212;
+  cursor: pointer;
+}
+
+.copyTitle > p {
   margin-right: 8px;
 }
 

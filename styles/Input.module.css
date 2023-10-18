@@ -7,7 +7,6 @@
   color: #ffffff;
   border: none;
   outline: none;
-  margin-bottom: 10px;
 }
 
 .input:last-child {
@@ -17,4 +16,9 @@
 .input[type="submit"],
 .input[type="button"] {
   cursor: pointer;
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: unset;
 }

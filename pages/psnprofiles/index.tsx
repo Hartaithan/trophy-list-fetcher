@@ -3,6 +3,7 @@ import {
   ChangeEvent,
   ChangeEventHandler,
   FormEventHandler,
+  useRef,
   useState,
 } from "react";
 import { useRouter } from "next/router";
@@ -16,6 +17,7 @@ import Select from "@/components/Select";
 import { ISelectOption } from "@/models/SelectModel";
 import { IPage } from "@/models/AppModel";
 import PSNProfilesLayout from "@/layouts/PSNProfilesLayout";
+import Button from "@/components/Button";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -27,6 +29,11 @@ interface IResultsState {
 interface FormTarget extends EventTarget {
   url: { value: string };
   lang: { value: string };
+}
+
+interface FormElements extends HTMLFormControlsCollection {
+  url: HTMLInputElement;
+  lang: HTMLSelectElement;
 }
 
 const isExample: { value: false; target: SEARCH_RESULTS | boolean } = {
@@ -41,6 +48,7 @@ const langOptions: ISelectOption[] = [
 
 const PSNProfilesPage: IPage = () => {
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
   const [url, setUrl] = useState<string>("");
   const [results, setResults] = useState<IResultsState>({
     isLoading: true,
@@ -83,6 +91,23 @@ const PSNProfilesPage: IPage = () => {
     setUrl(item.url);
   };
 
+  const handleNewTab = () => {
+    if (!formRef.current) {
+      alert("Form not found!");
+      return;
+    }
+    const form = formRef.current.elements as FormElements;
+    const formUrl = form.url.value.trim();
+    const formLang = form.lang.value;
+    if (formUrl.length === 0) {
+      alert("URL field is empty!");
+      return;
+    }
+    const encodedUrl = encodeURIComponent(formUrl);
+    const openUrl = `/psnprofiles/result?url=${encodedUrl}&lang=${formLang}`;
+    window.open(openUrl, "_blank");
+  };
+
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const form = e.target as FormTarget;
@@ -102,9 +127,13 @@ const PSNProfilesPage: IPage = () => {
   };
 
   return (
-    <form className={styles.form} onSubmit={onSubmit} autoComplete="off">
+    <form
+      className={styles.form}
+      onSubmit={onSubmit}
+      autoComplete="off"
+      ref={formRef}
+    >
       <SearchInput
-        className={styles.input}
         name="url"
         value={url}
         placeholder="Search or enter URL"
@@ -119,7 +148,10 @@ const PSNProfilesPage: IPage = () => {
         name="lang"
         options={langOptions}
       />
-      <Input className={styles.input} value="Submit" type="submit" />
+      <Button disabled={!url} onClick={handleNewTab} type="button">
+        Open in New Tab
+      </Button>
+      <Input value="Submit" type="submit" />
     </form>
   );
 };
