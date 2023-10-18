@@ -75,7 +75,7 @@ const PSNMainPage: IPSNPage = () => {
           });
       }
     },
-    500
+    1500
   );
 
   const handleInput: ChangeEventHandler<HTMLInputElement> = (e) => {
