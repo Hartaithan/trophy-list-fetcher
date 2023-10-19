@@ -74,8 +74,7 @@ const formatTrophies = (
     const description = trophyDetail || "Trophy description not found";
     const type = trophyType.charAt(0).toUpperCase() + trophyType.slice(1);
     const sameGroup = trophyGroupId === group.trophyGroupId;
-    const isPlatinum = trophyType === "platinum";
-    if (sameGroup && !isPlatinum) {
+    if (sameGroup) {
       trophies.push({ id, name, description, type });
     }
   }

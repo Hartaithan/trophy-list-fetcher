@@ -82,11 +82,16 @@ const PSNResultPage: IPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
   const { result } = props;
-  const [complete, setComplete] = useState(false);
+  const [complete, setComplete] = useState<boolean>(false);
+  const [platinum, setPlatinum] = useState<boolean>(false);
   const [rows, setRows] = useState<IRow[]>([...options]);
 
-  const onChange = () => {
+  const onCompleteChange = () => {
     setComplete((prev) => !prev);
+  };
+
+  const onPlatinumChange = () => {
+    setPlatinum((prev) => !prev);
   };
 
   const addRow: ChangeEventHandler<HTMLSelectElement> = (e) => {
@@ -131,9 +136,7 @@ const PSNResultPage: IPage<
     let range: Range | null = null;
     let selection: Selection | null = null;
     const readyForSelection = !!document.createRange && !!window.getSelection;
-    if (!readyForSelection) {
-      return;
-    }
+    if (!readyForSelection) return;
     range = document.createRange();
     selection = window.getSelection();
     if (selection && table) {
@@ -193,10 +196,21 @@ const PSNResultPage: IPage<
             id="complete"
             type="checkbox"
             checked={complete}
-            onChange={onChange}
+            onChange={onCompleteChange}
           />
           <label className={styles.completeLabel} htmlFor="complete">
             Toggle Completion
+          </label>
+        </div>
+        <div className={styles.completeContainer}>
+          <input
+            id="platinum"
+            type="checkbox"
+            checked={platinum}
+            onChange={onPlatinumChange}
+          />
+          <label className={styles.completeLabel} htmlFor="platinum">
+            Show Platinum
           </label>
         </div>
         <button className={styles.copyTitle} onClick={copyTitle}>
@@ -245,7 +259,7 @@ const PSNResultPage: IPage<
         <tbody>
           {result.lists.map((list) =>
             list.trophies.map((trophy, index) => {
-              if (trophy.type === "Platinum") {
+              if (trophy.type === "Platinum" && !platinum) {
                 return null;
               }
               return (
