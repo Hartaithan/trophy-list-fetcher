@@ -1,0 +1,25 @@
+import { ISelectOption } from "@/models/SelectModel";
+
+export const locales: ISelectOption[] = [
+  { id: 1, value: "cs-CZ", label: "Czech" },
+  { id: 2, value: "da-DK", label: "Danish" },
+  { id: 3, value: "de-DE", label: "German" },
+  { id: 4, value: "en-US", label: "English" },
+  { id: 5, value: "es-ES", label: "Spanish" },
+  { id: 6, value: "fi-FI", label: "Finnish" },
+  { id: 7, value: "fr-FR", label: "French" },
+  { id: 8, value: "hu-HU", label: "Hungarian" },
+  { id: 9, value: "it-IT", label: "Italian" },
+  { id: 10, value: "ja-JP", label: "Japanese" },
+  { id: 11, value: "ko-KR", label: "Korean" },
+  { id: 12, value: "nl-NL", label: "Dutch" },
+  { id: 13, value: "no-NO", label: "Norwegian" },
+  { id: 14, value: "pl-PL", label: "Polish" },
+  { id: 15, value: "pt-PT", label: "Portuguese" },
+  { id: 16, value: "ro-RO", label: "Romanian" },
+  { id: 17, value: "ru-RU", label: "Russian" },
+  { id: 18, value: "sv-SE", label: "Swedish" },
+  { id: 19, value: "tr-TR", label: "Turkish" },
+  { id: 20, value: "uk-UA", label: "Ukrainian" },
+  { id: 21, value: "zh-Hans", label: "Chinese" },
+];

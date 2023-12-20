@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 import { ISearchResult } from "@/models/SearchModel";
-import { ISelectOption } from "@/models/SelectModel";
+import { locales } from "@/constants/locales";
 import Select from "@/components/Select";
 import Button from "@/components/Button";
 
@@ -33,11 +33,6 @@ interface FormElements extends HTMLFormControlsCollection {
   url: HTMLInputElement;
   lang: HTMLSelectElement;
 }
-
-const langOptions: ISelectOption[] = [
-  { id: 1, value: "en-en", label: "English" },
-  { id: 2, value: "ru-ru", label: "Russian" },
-];
 
 const PSNMainPage: IPSNPage = () => {
   const router = useRouter();
@@ -140,11 +135,7 @@ const PSNMainPage: IPSNPage = () => {
         onSuggestClick={handleSuggestion}
         autoComplete="off"
       />
-      <Select
-        defaultValue={langOptions[0].value}
-        name="lang"
-        options={langOptions}
-      />
+      <Select defaultValue={locales[3].value} name="lang" options={locales} />
       <Button disabled={!url} onClick={handleNewTab} type="button">
         Open in New Tab
       </Button>

@@ -14,7 +14,7 @@ import { SEARCH_RESULTS } from "@/models/ExampleModel";
 import { isLink } from "@/helpers/link";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
-import { ISelectOption } from "@/models/SelectModel";
+import { locales } from "@/constants/locales";
 import { IPage } from "@/models/AppModel";
 import PSNProfilesLayout from "@/layouts/PSNProfilesLayout";
 import Button from "@/components/Button";
@@ -40,11 +40,6 @@ const isExample: { value: false; target: SEARCH_RESULTS | boolean } = {
   value: false,
   target: SEARCH_RESULTS.One,
 };
-
-const langOptions: ISelectOption[] = [
-  { id: 1, value: "en", label: "English" },
-  { id: 2, value: "ru", label: "Russian" },
-];
 
 const PSNProfilesPage: IPage = () => {
   const router = useRouter();
@@ -143,11 +138,7 @@ const PSNProfilesPage: IPage = () => {
         onSuggestClick={handleSuggestion}
         autoComplete="off"
       />
-      <Select
-        defaultValue={langOptions[0].value}
-        name="lang"
-        options={langOptions}
-      />
+      <Select defaultValue={locales[3].value} name="lang" options={locales} />
       <Button disabled={!url} onClick={handleNewTab} type="button">
         Open in New Tab
       </Button>
