@@ -1,3 +1,4 @@
+import styles from "@/styles/PSNProfiles.module.css";
 import Input from "@/components/Input";
 import { IPage } from "@/models/AppModel";
 import { useRouter } from "next/router";
@@ -27,14 +28,14 @@ const PSNSignInPage: IPage = () => {
   };
 
   return (
-    <>
+    <div className={styles.form}>
       <Input
         value={npsso}
         placeholder="Enter your NPSSO token"
         onChange={(e) => setNpsso(e.target.value)}
       />
       <Input type="button" value="Submit" onClick={() => handleSubmit()} />
-    </>
+    </div>
   );
 };
 
