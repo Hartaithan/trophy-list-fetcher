@@ -14,7 +14,7 @@ import { SEARCH_RESULTS } from "@/models/ExampleModel";
 import { isLink } from "@/helpers/link";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
-import { locales } from "@/constants/locales";
+import { psnProfilesLocales } from "@/constants/locales";
 import { IPage } from "@/models/AppModel";
 import PSNProfilesLayout from "@/layouts/PSNProfilesLayout";
 import Button from "@/components/Button";
@@ -138,7 +138,11 @@ const PSNProfilesPage: IPage = () => {
         onSuggestClick={handleSuggestion}
         autoComplete="off"
       />
-      <Select defaultValue={locales[3].value} name="lang" options={locales} />
+      <Select
+        defaultValue={psnProfilesLocales[0].value}
+        name="lang"
+        options={psnProfilesLocales}
+      />
       <Button disabled={!url} onClick={handleNewTab} type="button">
         Open in New Tab
       </Button>

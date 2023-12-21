@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 import { ISearchResult } from "@/models/SearchModel";
-import { locales } from "@/constants/locales";
+import { psnLocales } from "@/constants/locales";
 import Select from "@/components/Select";
 import Button from "@/components/Button";
 
@@ -135,7 +135,11 @@ const PSNMainPage: IPSNPage = () => {
         onSuggestClick={handleSuggestion}
         autoComplete="off"
       />
-      <Select defaultValue={locales[3].value} name="lang" options={locales} />
+      <Select
+        defaultValue={psnLocales[0].value}
+        name="lang"
+        options={psnLocales}
+      />
       <Button disabled={!url} onClick={handleNewTab} type="button">
         Open in New Tab
       </Button>

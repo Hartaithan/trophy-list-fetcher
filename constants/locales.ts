@@ -1,10 +1,10 @@
 import { ISelectOption } from "@/models/SelectModel";
 
-export const locales: ISelectOption[] = [
-  { id: 1, value: "cs-CZ", label: "Czech" },
+export const psnLocales: ISelectOption[] = [
+  { id: 1, value: "en-US", label: "English" },
   { id: 2, value: "da-DK", label: "Danish" },
   { id: 3, value: "de-DE", label: "German" },
-  { id: 4, value: "en-US", label: "English" },
+  { id: 4, value: "cs-CZ", label: "Czech" },
   { id: 5, value: "es-ES", label: "Spanish" },
   { id: 6, value: "fi-FI", label: "Finnish" },
   { id: 7, value: "fr-FR", label: "French" },
@@ -22,4 +22,26 @@ export const locales: ISelectOption[] = [
   { id: 19, value: "tr-TR", label: "Turkish" },
   { id: 20, value: "uk-UA", label: "Ukrainian" },
   { id: 21, value: "zh-Hans", label: "Chinese" },
+];
+
+export const psnProfilesLocales: ISelectOption[] = [
+  { id: 1, value: "en-us", label: "English (US)" },
+  { id: 2, value: "en-gb", label: "English (UK)" },
+  { id: 3, value: "fr", label: "German" },
+  { id: 4, value: "es", label: "Spanish" },
+  { id: 5, value: "de", label: "German" },
+  { id: 6, value: "it", label: "Italian" },
+  { id: 7, value: "nl", label: "Dutch" },
+  { id: 8, value: "pt", label: "Portuguese" },
+  { id: 9, value: "ru", label: "Russian" },
+  { id: 10, value: "ko", label: "Korean" },
+  { id: 11, value: "zh-tw", label: "Traditional Chinese" },
+  { id: 12, value: "zh-cn", label: "Simplified Chinese" },
+  { id: 13, value: "fi", label: "Finnish" },
+  { id: 14, value: "sv", label: "Swedish" },
+  { id: 15, value: "da", label: "Danish" },
+  { id: 16, value: "no", label: "Norwegian" },
+  { id: 17, value: "pl", label: "Polish" },
+  { id: 18, value: "pt-br", label: "Portuguese (Brazil)" },
+  { id: 19, value: "jp", label: "Japanese" },
 ];
